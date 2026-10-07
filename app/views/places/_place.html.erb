@@ -1,0 +1,27 @@
+<div class="place-card">
+  <% if place.image.present? %>
+    <%= image_tag place.image.url, alt: place.name, width: 300 %>
+  <% else %>
+    <%= image_tag "/placeholder.jpeg", alt: place.name, width: 300 %>
+  <% end %>
+
+  <h2><%= place.name %></h2>
+
+  <p>
+    <strong>Адрес:</strong>
+    <%= place.address %>
+  </p>
+
+  <p>
+    <%= place.description %>
+  </p>
+
+  <p>
+    <strong>Период:</strong>
+    <%= place.year_from %>–<%= place.year_to %>
+  </p>
+
+  <p>
+    <%= link_to "Подробнее", place %>
+  </p>
+</div>
