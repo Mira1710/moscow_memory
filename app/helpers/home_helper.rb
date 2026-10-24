@@ -22,5 +22,4 @@ module HomeHelper
     optional_map_asset("markers/places/#{place.id}.svg") ||
       map_category_asset(map_place_category(place)) || optional_map_asset("markers/default.svg")
   end
-
 end

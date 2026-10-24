@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_25_004000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_25_013000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -61,6 +61,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_004000) do
     t.jsonb "photo_images", default: [], null: false
     t.jsonb "map_images", default: [], null: false
     t.jsonb "object_images", default: [], null: false
+    t.string "seed_key"
+    t.index ["seed_key"], name: "index_places_on_seed_key", unique: true
   end
 
   add_foreign_key "historical_states", "places"

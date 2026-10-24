@@ -1,0 +1,57 @@
+# Creates only missing examples; subsequent runs preserve every editorial change.
+class DemoContent
+  def self.load!
+    created = 0
+    Place.transaction do
+      entries.each do |entry|
+        next if Place.exists?(seed_key: entry.fetch(:seed_key))
+
+        Place.create!(entry)
+        created += 1
+      end
+    end
+    created
+  end
+
+  def self.entries
+    [
+      {
+        seed_key: "demo-zaryadye", name: "Парк «Зарядье»", category: "public_spaces",
+        address: "Москва, улица Варварка, 6", latitude: 55.7510, longitude: 37.6288,
+        founded: "2017 год", year_from: 2017,
+        description: "Парк «Зарядье» открылся 9 сентября 2017 года в центре Москвы. Его ландшафт объединяет образы леса, степи, северных ландшафтов и заливных лугов.\n\nЭтот материал показывает, как связать место на карте с историческим периодом и архивом. Собственные фотографии и развёрнутый текст можно добавить через редактор статьи.",
+        sources: "Мосинжпроект — парк «Зарядье»\nhttps://mosinzhproekt.ru/project/park-zaryade/",
+        historical_states_attributes: [
+          { title: "Открытие ландшафтного парка", year_from: 2017,
+            description: "9 сентября 2017 года состоялось открытие парка. В статье можно отдельно собрать фотографии территории и материалы о проекте.",
+            show_preserved: true, preserved_text: "Ландшафтный парк — предмет этого раздела. Добавьте собственные фотографии и подписи через админку.", show_lost: false }
+        ]
+      },
+      {
+        seed_key: "demo-melnikov", name: "Дом Мельникова", category: "houses",
+        address: "Москва, Кривоарбатский переулок, 10", latitude: 55.7480, longitude: 37.5894,
+        founded: "1927–1929 годы", year_from: 1927, architect: "Константин Мельников", architectural_style: "Авангард",
+        description: "Дом-мастерская Константина Мельникова построен в 1927–1929 годах. Архитектор проектировал его для себя и своей семьи.\n\nМатериал разделён на строительство и заселение: выберите период, чтобы сопоставить этапы истории. Галереи позволяют разместить отдельные фотографии, планы и изображения предметов.",
+        sources: "Музей архитектуры — Образы Дома Мельникова\nhttps://muar.ru/exhibitions/obrazy-doma-melnikova/\nМузей архитектуры — Ремонты и реставрация\nhttps://muar.ru/dom-melnikova/restavratsiya/remonty-i-restavratsiya-1930-1990-e-gg-/",
+        historical_states_attributes: [
+          { title: "Строительство дома-мастерской", year_from: 1927, year_to: 1928,
+            description: "В 1927 году началось строительство собственного дома архитектора. Этот раздел предназначен для хроники строительных работ и архивных материалов.", show_preserved: false, show_lost: false },
+          { title: "Заселение и доработка дома", year_from: 1929,
+            description: "Осенью 1929 года состоялись приёмка работ и заселение семьи. В первой половине 1930-х годов работы по доработке дома продолжались.", show_preserved: true,
+            preserved_text: "Дом-мастерская является объектом изучения и сохранения Музея Мельниковых. Материалы о состоянии здания можно дополнить фотографиями.", show_lost: false }
+        ]
+      },
+      {
+        seed_key: "demo-shukhov", name: "Шуховская башня", category: "industrial",
+        address: "Москва, улица Шаболовка", latitude: 55.7173, longitude: 37.6116,
+        founded: "1922 год", year_from: 1922, architect: "Владимир Шухов",
+        description: "Радиобашня на Шаболовке построена по проекту и под руководством инженера Владимира Шухова. В Архиве Российской академии наук хранятся материалы о радиомачте 1922 года.\n\nСтатья связывает инженерный объект с местом на карте. В архив можно добавить собственные снимки конструкции, схемы и документальные материалы с указанием источников.",
+        sources: "Архивы Российской академии наук — Владимир Григорьевич Шухов, часть 2\nhttps://arran.ru/exposition5_3",
+        historical_states_attributes: [
+          { title: "Радиобашня на Шаболовке", year_from: 1922,
+            description: "Радиобашня стала одним из известных сооружений инженера Шухова. Исторические документы помогают сопоставить первоначальный проект и реализованное сооружение.", show_preserved: false, show_lost: false }
+        ]
+      }
+    ]
+  end
+end

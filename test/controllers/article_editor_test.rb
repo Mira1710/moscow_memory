@@ -13,8 +13,8 @@ class ArticleEditorTest < ActionDispatch::IntegrationTest
       name: "Место из редактора", description: "Текст статьи <script>alert(1)</script>", address: "Москва",
       latitude: "55.75", longitude: "37.62", category: "public_spaces", founded: "XIX век",
       architectural_style: "Модерн", architect: "Автор", sources: "Архив, фонд 1",
-      image: photo, new_photo_images: [photo], new_map_images: [photo], new_object_images: [photo],
-      historical_states_attributes: { "0" => { title: "Первый период", description: "История периода", year_from: 1900, year_to: 1950, new_images: [photo] } }
+      image: photo, new_photo_images: [ photo ], new_map_images: [ photo ], new_object_images: [ photo ],
+      historical_states_attributes: { "0" => { title: "Первый период", description: "История периода", year_from: 1900, year_to: 1950, new_images: [ photo ] } }
     } }
     place = Place.order(:id).last
     assert_redirected_to admin_place_path(place)
@@ -34,8 +34,8 @@ class ArticleEditorTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Архив, фонд 1"
     assert_select "template script", 0
 
-    patch place_path(place), params: { place: { description: "Обновлённый текст", new_photo_images: [photo],
-      historical_states_attributes: { "0" => { id: state.id, description: "Обновлённая история", new_images: [photo] } } } }
+    patch place_path(place), params: { place: { description: "Обновлённый текст", new_photo_images: [ photo ],
+      historical_states_attributes: { "0" => { id: state.id, description: "Обновлённая история", new_images: [ photo ] } } } }
     assert_redirected_to admin_place_path(place)
     assert_equal 2, place.reload.photo_images.size
     assert_equal 2, state.reload.images.size
@@ -43,8 +43,8 @@ class ArticleEditorTest < ActionDispatch::IntegrationTest
     assert_equal 2, place.reload.photo_images.size
     assert_equal 2, state.reload.images.size
 
-    patch place_path(place), params: { place: { remove_photo_images: [place.photo_images.first.identifier],
-      historical_states_attributes: { "0" => { id: state.id, remove_images: [state.images.first.identifier] } } } }
+    patch place_path(place), params: { place: { remove_photo_images: [ place.photo_images.first.identifier ],
+      historical_states_attributes: { "0" => { id: state.id, remove_images: [ state.images.first.identifier ] } } } }
     assert_equal 1, place.reload.photo_images.size
     assert_equal 1, state.reload.images.size
   end
@@ -63,7 +63,7 @@ class ArticleEditorTest < ActionDispatch::IntegrationTest
   test "period can be deleted only from its own article" do
     place = places(:one)
     other = historical_states(:two)
-    assert_raises(ActiveRecord::RecordNotFound) { place.update!(historical_states_attributes: [{ id: other.id, _destroy: "1" }]) }
+    assert_raises(ActiveRecord::RecordNotFound) { place.update!(historical_states_attributes: [ { id: other.id, _destroy: "1" } ]) }
     state = place.historical_states.first
     assert_difference("HistoricalState.count", -1) do
       patch place_path(place), params: { place: { historical_states_attributes: { "0" => { id: state.id, _destroy: "1" } } } }
@@ -82,13 +82,13 @@ class ArticleEditorTest < ActionDispatch::IntegrationTest
   end
   test "invalid image type is rejected without creating a place" do
     assert_no_difference("Place.count") do
-      post places_path, params: { place: { name: "Ошибка файла", new_photo_images: [fixture_file_upload("not-an-image.txt", "text/plain")] } }
+      post places_path, params: { place: { name: "Ошибка файла", new_photo_images: [ fixture_file_upload("not-an-image.txt", "text/plain") ] } }
     end
     assert_response :unprocessable_content
   end
 
   test "cached photos survive validation error and form resubmission" do
-    post places_path, params: { place: { name: "", new_photo_images: [photo] } }
+    post places_path, params: { place: { name: "", new_photo_images: [ photo ] } }
     assert_response :unprocessable_content
     cache = css_select('input[name="place[photo_images_cache]"]').first["value"]
     assert cache.present?
@@ -98,5 +98,4 @@ class ArticleEditorTest < ActionDispatch::IntegrationTest
     assert_equal 1, place.photo_images.size
     assert File.file?(place.photo_images.first.path)
   end
-
 end

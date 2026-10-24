@@ -8,11 +8,11 @@ class AdminAccessTest < ActionDispatch::IntegrationTest
     assert_select "a[href='#{edit_admin_place_path(place)}']", 0
     get admin_places_path
     assert_redirected_to admin_login_path
-    [places_path, admin_places_path].each do |path|
+    [ places_path, admin_places_path ].each do |path|
       assert_no_difference("Place.count") { post path, params: { place: { name: "Запрещено" } } }
       assert_redirected_to admin_login_path
     end
-    [place_path(place), admin_place_path(place)].each do |path|
+    [ place_path(place), admin_place_path(place) ].each do |path|
       patch path, params: { place: { name: "Запрещено" } }
       assert_redirected_to admin_login_path
       assert_not_equal "Запрещено", place.reload.name
@@ -61,7 +61,7 @@ class AdminAccessTest < ActionDispatch::IntegrationTest
     photo = -> { fixture_file_upload("editor.png", "image/png") }
     patch admin_place_path(place), params: { place: { historical_states_attributes: { "0" => {
       id: state.id, show_preserved: "1", show_lost: "1", preserved_text: "Сохранился слой", lost_text: "Утрачены постройки",
-      new_preserved_images: [photo.call], new_lost_images: [photo.call]
+      new_preserved_images: [ photo.call ], new_lost_images: [ photo.call ]
     } } } }
     assert_redirected_to admin_place_path(place)
     assert_equal 1, state.reload.preserved_images.size
@@ -81,7 +81,7 @@ class AdminAccessTest < ActionDispatch::IntegrationTest
   end
   test "admin navigation stays internal and public pages never show author controls" do
     post admin_session_path, params: { email: "author@example.test", password: "test-author-password-123" }
-    [admin_places_path, admin_map_path, admin_walking_routes_path, admin_forum_path, admin_about_path, admin_profile_path].each do |path|
+    [ admin_places_path, admin_map_path, admin_walking_routes_path, admin_forum_path, admin_about_path, admin_profile_path ].each do |path|
       get path
       assert_response :success
       assert_select ".admin-shell", 1
@@ -90,7 +90,7 @@ class AdminAccessTest < ActionDispatch::IntegrationTest
       assert_select ".admin-topbar form[action='#{admin_logout_path}']", 1
       css_select(".admin-content a").each { |link| assert link["href"].start_with?("/admin"), "Admin link escapes to #{link['href']}" }
     end
-    [root_path, articles_path, places_path, place_path(places(:one))].each do |path|
+    [ root_path, articles_path, places_path, place_path(places(:one)) ].each do |path|
       get path
       assert_response :success
       assert_select "a[href^='/admin']", 0
@@ -102,5 +102,4 @@ class AdminAccessTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "a[href='/']", 0
   end
-
 end

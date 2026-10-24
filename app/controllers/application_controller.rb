@@ -29,5 +29,4 @@ class ApplicationController < ActionController::Base
     return if admin_signed_in?
     redirect_to admin_login_path, alert: "Войдите в админку, чтобы редактировать статьи.", status: :see_other
   end
-
 end
