@@ -1,0 +1,11 @@
+<figure class="about-image <%= local_assigns[:css_class] %>" data-image="<%= filename %>">
+  <% if Rails.root.join("app/assets/images/about", filename).file? %>
+    <%= image_tag "about/#{filename}", alt: alt, loading: "lazy", decoding: "async" %>
+  <% else %>
+    <div class="about-image-placeholder" role="img" aria-label="<%= alt %>">
+      <span><%= alt %></span>
+      <small>about/<%= filename %></small>
+    </div>
+  <% end %>
+  <% if local_assigns[:caption] %><figcaption><%= caption %></figcaption><% end %>
+</figure>

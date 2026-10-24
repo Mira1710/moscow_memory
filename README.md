@@ -1,24 +1,34 @@
-# README
+# Москведение — Moscow Memory
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Цифровой архив архитектурной памяти Москвы на Ruby on Rails. Карта Яндекса показывает объекты из базы; по метке справа открывается статья с историческими периодами и галереями. В админке можно редактировать тексты и фотографии, отдельно включать блоки «Сохранившееся» и «Утраченное».
 
-Things you may want to cover:
+## Запуск локально
 
-* Ruby version
+Нужны Ruby версии из `.ruby-version`, Bundler и PostgreSQL.
 
-* System dependencies
+```sh
+bundle install
+bin/rails db:prepare
+export YANDEX_MAPS_API_KEY='ваш ключ JavaScript API Яндекс Карт'
+bin/rails server
+```
 
-* Configuration
+Публичный сайт: http://localhost:3000/ . Админка: http://localhost:3000/admin . При первом локальном входе создайте аккаунт автора. Подробности: [админка](docs/admin.md), [редактор статей](docs/article-editor.md).
 
-* Database creation
+API-ключ задаётся через окружение. В кабинете Яндекса ограничьте его разрешёнными доменами. Без ключа карта показывает сообщение об ошибке, материалы остаются доступны через архив.
 
-* Database initialization
+## Данные и изображения
 
-* How to run the test suite
+Статьи и исторические периоды хранятся в PostgreSQL. Загруженные через редактор изображения находятся в `public/uploads`; SVG меток — в `app/assets/images/markers`. База, загруженные фотографии, пароли, `.env` и `config/master.key` в Git не включаются. Для переноса рабочего наполнения на сервер нужны отдельная резервная копия базы и папки загрузок.
 
-* Services (job queues, cache servers, search engines, etc.)
+## Проверка
 
-* Deployment instructions
+```sh
+bin/rails test
+```
 
-* ...
+## Публикация
+
+GitHub хранит исходный код. Для работы редактора, входа и базы нужен сервер с Ruby on Rails и PostgreSQL, постоянным хранилищем загрузок и настроенными переменными окружения. На сервере аккаунт автора создаётся через `RAILS_ENV=production bin/rails admin:create`.
+
+GitHub Pages не запускает Rails и базу данных. Для Pages потребуется отдельный статический экспорт публичных страниц; он пока не реализован. Админка должна работать на Rails-сервере.

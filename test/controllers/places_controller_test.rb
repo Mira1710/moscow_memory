@@ -2,6 +2,7 @@ require "test_helper"
 
 class PlacesControllerTest < ActionDispatch::IntegrationTest
   setup do
+    post admin_session_path, params: { email: "author@example.test", password: "test-author-password-123" }
     @place = places(:one)
   end
 
@@ -12,7 +13,7 @@ class PlacesControllerTest < ActionDispatch::IntegrationTest
 
   test "should get new" do
     get new_place_url
-    assert_response :success
+    assert_redirected_to new_admin_place_path
   end
 
   test "should create place" do
@@ -20,7 +21,7 @@ class PlacesControllerTest < ActionDispatch::IntegrationTest
       post places_url, params: { place: { address: @place.address, description: @place.description, latitude: @place.latitude, longitude: @place.longitude, name: @place.name, year_from: @place.year_from, year_to: @place.year_to } }
     end
 
-    assert_redirected_to place_url(Place.last)
+    assert_redirected_to admin_place_url(Place.last)
   end
 
   test "should show place" do
@@ -30,12 +31,12 @@ class PlacesControllerTest < ActionDispatch::IntegrationTest
 
   test "should get edit" do
     get edit_place_url(@place)
-    assert_response :success
+    assert_redirected_to edit_admin_place_path(@place)
   end
 
   test "should update place" do
     patch place_url(@place), params: { place: { address: @place.address, description: @place.description, latitude: @place.latitude, longitude: @place.longitude, name: @place.name, year_from: @place.year_from, year_to: @place.year_to } }
-    assert_redirected_to place_url(@place)
+    assert_redirected_to admin_place_url(@place)
   end
 
   test "should destroy place" do
@@ -43,6 +44,6 @@ class PlacesControllerTest < ActionDispatch::IntegrationTest
       delete place_url(@place)
     end
 
-    assert_redirected_to places_url
+    assert_redirected_to admin_places_url
   end
 end

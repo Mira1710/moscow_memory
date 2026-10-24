@@ -66,3 +66,6 @@ group :test do
 end
 
 gem "carrierwave"
+
+# Password hashing for the author administration area.
+gem "bcrypt", "~> 3.1"

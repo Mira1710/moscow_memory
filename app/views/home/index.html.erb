@@ -1,58 +1,106 @@
-<header>
-  <h1>Архитектурная память Москвы</h1>
+<% content_for :title, "Архитектурная память Москвы" %>
+<div class="moscow-memory" data-controller="memory-map"
+     data-memory-map-key-value="<%= ENV.fetch('YANDEX_MAPS_API_KEY', '') %>"
+     data-action="keydown.esc@window->memory-map#close turbo:before-cache@document->memory-map#teardown">
+  <%= render "shared/sidebar", active_section: "map" %>
+  <main>
+    <section class="map-layout" aria-label="Карта и статья">
+      <div class="map" data-memory-map-target="map" aria-label="Интерактивная карта Москвы"></div>
+      <p class="map-status" data-memory-map-target="status" role="status">Загрузка карты…</p>
+      <div class="intro-stack">
+        <section class="card">
+          <h1>Что было здесь раньше?</h1>
+          <p>Исследуйте Москву через архивные фотографии и узнайте всё о её изменениях в разные исторические и архитектурные эпохи со времён основания города</p>
+          <span class="red">Подсказка</span>
+          <p>Выберите метку, год или период:
+             в открывшемся блоке статьи мы собрали пример цифрового исторического архива </p>
+        </section>
+        <section class="card launch-card">
+          <h2>Скоро запуск!</h2>
+          <p>Оставьте почту, и мы уведомим о начале работы сервиса изучения Москвы</p>
+          <form data-action="submit->memory-map#subscribe input->memory-map#validateSubscription">
+            <label class="visually-hidden" for="launch-email">Электронная почта</label>
+            <input id="launch-email" type="email" placeholder="e-mail" required data-memory-map-target="email">
+            <label class="launch-consent"><input type="checkbox" required data-memory-map-target="consent"> <span>Согласен на обработку персональных данных</span></label>
+            <button class="launch-submit" type="submit" disabled data-memory-map-target="subscribeButton">Узнать о запуске</button>
+            <p class="launch-note" role="status">Форма пока не подключена. Адрес не отправляется.</p>
+          </form>
+        </section>
+      </div>
+      <section class="map-places" aria-label="Метки">
+        <button class="panel-toggle" type="button" data-action="memory-map#togglePanel" aria-expanded="false" aria-controls="memory-place-list">Метки <span aria-hidden="true">+</span></button>
+        <div id="memory-place-list" class="place-list" hidden>
+          <div class="category-list" role="group" aria-label="Категории меток">
+            <% categories = HomeHelper::MAP_CATEGORIES.merge(@places.any? { |place| map_place_category(place) == "uncategorized" } ? { "uncategorized" => "Без категории" } : {}) %>
+            <% categories.each do |key, label| %>
+              <label class="category-filter">
+                <input type="checkbox" checked value="<%= key %>" data-action="memory-map#filter">
+                <% if (icon = map_category_asset(key)) %><%= image_tag icon, alt: "", class: "category-icon" %><% else %><span class="category-icon category-icon-empty" aria-hidden="true"></span><% end %>
+                <span><%= label %></span>
+              </label>
+            <% end %>
+          </div>
+          <details class="map-object-list"><summary>Объекты на карте</summary>
+          <% @places.each do |place| %>
+            <button type="button" class="link place-link" data-action="memory-map#open" data-place-id="<%= place.id %>" aria-controls="memory-article" aria-expanded="false"><%= place.name %></button>
+          <% end %>
+          <% if @places.empty? %><p>В архиве пока нет объектов.</p><% end %>
+          </details>
+        </div>
+      </section>
+      <section class="interval" aria-label="Шаг временной шкалы">
+        <button class="panel-toggle" type="button" data-action="memory-map#togglePanel" aria-expanded="false" aria-controls="memory-interval-options">Интервал <span aria-hidden="true">+</span></button>
+        <div id="memory-interval-options" hidden>
+          <div class="interval-buttons">
+            <% [50, 10, 1].each do |step| %>
+              <button type="button" data-action="memory-map#setStep" data-step="<%= step %>" aria-pressed="<%= step == 10 %>"><%= step %> <%= step == 1 ? "год" : "лет" %></button>
+            <% end %>
+          </div>
+          <button type="button" class="all-years" data-action="memory-map#showAllYears" data-memory-map-target="allYearsButton" aria-pressed="true">Все эпохи</button>
+        </div>
+      </section>
 
-  <nav>
-    <%= link_to "Главная", root_path %>
-    <%= link_to "Карта", "#map" %>
-    <%= link_to "Архив", places_path %>
-    <%= link_to "О проекте", "#about" %>
-  </nav>
-</header>
-
-<main>
-  <section>
-    <h2>Москва меняется. Память остаётся.</h2>
-
-    <p>
-      Интерактивный архив архитектурной памяти Москвы.
-      Исследуйте, как менялся город и что находилось
-      на знакомых местах раньше.
-    </p>
-  </section>
-
-  <section id="map">
-    <h2>Карта Москвы</h2>
-
-    <div id="map" style="width: 100%; height: 600px;"></div>
-  </section>
-
-  <section>
-    <h2>Архитектурные объекты</h2>
-
-    <%= render @places if defined?(@places) %>
-
-    <%= link_to "Смотреть весь архив", places_path %>
-  </section>
-
-  <section id="about">
-    <h2>О проекте</h2>
-
-    <p>
-      Проект помогает увидеть, как менялась архитектурная среда Москвы
-      и какие здания и места существовали здесь в разные периоды.
-    </p>
-  </section>
-</main>
-
-
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const map = L.map("map").setView([55.7558, 37.6176], 11);
-
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-  });
-</script>
+    </section>
+    <section class="timeline" aria-label="Временная шкала">
+      <input type="hidden" value="<%= Date.current.year %>" data-memory-map-target="year">
+      <input type="checkbox" checked hidden data-memory-map-target="allYears">
+      <output class="visually-hidden" aria-live="polite" data-memory-map-target="yearLabel"><%= Date.current.year %></output>
+      <div class="year-track" data-memory-map-target="years" role="group" aria-label="Выбрать год"></div>
+      <div class="period-track" role="group" aria-label="Исторические периоды">
+        <% [["Реконструкция", 1935, 1941], ["ВОВ и восстановление", 1941, 1960], ["Жилые дома", 1960, 1990], ["Коммерциализация", 1990, 2010], ["Современный урбанизм", 2010, Date.current.year]].each do |label, year, finish| %>
+          <button type="button" data-axis-from="<%= year %>" data-axis-to="<%= finish %>" title="<%= label %>" data-action="memory-map#selectYear" data-year="<%= year %>"><%= label %></button>
+        <% end %>
+      </div>
+      <div class="place-period-track" data-memory-map-target="placePeriods" hidden></div>
+      <div class="style-track" aria-label="Архитектурные направления">
+        <% [["Сталинский ампир", 1930, 1955], ["Советский модернизм", 1955, 1970], ["Брутализм", 1970, 1980], ["Функционализм", 1980, 1990], ["Деконструктивизм", 1990, 2010], ["Неоклассицизм, хай-тек", 2010, Date.current.year]].each do |label, year, finish| %><span data-axis-from="<%= year %>" data-axis-to="<%= finish %>" title="<%= label %>"><%= label %></span><% end %>
+      </div>
+    </section>
+      <aside id="memory-article" class="article" data-memory-map-target="article" aria-label="Статья о месте" hidden>
+        <button type="button" class="close-article" data-action="memory-map#close" data-memory-map-target="close" aria-label="Закрыть статью">×</button>
+        <div class="article-scroll" tabindex="0" data-memory-map-target="scroll">
+          <div class="article-body" data-memory-map-target="body"></div>
+        </div>
+      </aside>
+    <div class="layout-spacer" aria-hidden="true"></div>
+    <footer class="site-footer">
+      <div>Цифровой архив Москвы.<br>© Москведение, <%= Date.current.year %></div>
+      <div><%= link_to "Источники", "#memory-sources", data: { action: "memory-map#showSources" } %></div>
+      <div class="footer-links"><button type="button" disabled title="Добавьте ссылку на вашу политику">Политика конфиденциальности</button><button type="button" disabled title="Добавьте контакт проекта">Обратная связь</button></div>
+      <div class="footer-links"><button type="button" disabled title="Добавьте адрес канала">Telegram ↗</button><button type="button" disabled title="Добавьте адрес сообщества">VK ↗</button></div>
+    </footer>
+    <dialog id="memory-sources" data-memory-map-target="sources">
+      <button type="button" class="sources-close" data-action="memory-map#closeSources" aria-label="Закрыть">×</button>
+      <h2>Источники</h2><p>Объекты и исторические состояния загружаются из архива проекта Moscow Memory. Библиографические ссылки к материалам нужно добавить отдельно.</p>
+      <a href="https://yandex.ru/maps/" target="_blank" rel="noopener">Картографическая основа — Яндекс Карты</a>
+    </dialog>
+  </main>
+  <% @places.each do |place| %>
+    <template data-memory-map-target="place" data-place-id="<%= place.id %>"
+              data-category="<%= map_place_category(place) %>" data-icon="<%= map_marker_asset(place) %>"
+              data-name="<%= place.name %>" data-latitude="<%= place.latitude %>" data-longitude="<%= place.longitude %>"
+              data-from="<%= place.year_from %>" data-to="<%= place.year_to %>">
+      <%= render "map_article", place: place %>
+    </template>
+  <% end %>
+</div>

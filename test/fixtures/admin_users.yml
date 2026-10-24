@@ -1,0 +1,3 @@
+owner:
+  email: author@example.test
+  password_digest: <%= BCrypt::Password.create("test-author-password-123", cost: 4) %>

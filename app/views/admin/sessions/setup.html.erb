@@ -1,0 +1,9 @@
+<% content_for :title, "Создать аккаунт автора — Москведение" %>
+<div class="editor-page admin-login"><h1>Создать аккаунт автора</h1><p>Первоначальная настройка админки на этом компьютере.</p>
+<% if @admin&.errors&.any? %><div role="alert"><%= @admin.errors.full_messages.join(". ") %></div><% end %>
+<%= form_with scope: :admin_user, url: admin_setup_path, class: "article-editor", data: { turbo: false } do |form| %>
+  <div class="editor-field"><%= form.label :email, "Почта" %><%= form.email_field :email, required: true, autocomplete: "username", value: @admin&.email %></div>
+  <div class="editor-field"><%= form.label :password, "Пароль (не меньше 12 символов)" %><%= form.password_field :password, required: true, minlength: 12, autocomplete: "new-password" %></div>
+  <div class="editor-field"><%= form.label :password_confirmation, "Повторите пароль" %><%= form.password_field :password_confirmation, required: true, autocomplete: "new-password" %></div>
+  <div class="editor-save"><%= form.submit "Создать аккаунт и войти" %></div>
+<% end %></div>

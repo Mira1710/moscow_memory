@@ -1,57 +1,43 @@
-<%= form_with(model: place) do |form| %>
+<%= form_with(model: [:admin, place], class: "article-editor", data: { controller: "nested-periods" }) do |form| %>
   <% if place.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(place.errors.count, "error") %> prohibited this place from being saved:</h2>
-
-      <ul>
-        <% place.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
+    <div class="editor-errors" role="alert"><h2>Не удалось сохранить</h2><ul><% place.errors.full_messages.each do |message| %><li><%= message %></li><% end %></ul></div>
   <% end %>
-
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
-  </div>
-
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.textarea :description %>
-  </div>
-
-  <div>
-    <%= form.label :address, style: "display: block" %>
-    <%= form.text_field :address %>
-  </div>
-
-  <div>
-    <%= form.label :latitude, style: "display: block" %>
-    <%= form.text_field :latitude %>
-  </div>
-
-  <div>
-    <%= form.label :longitude, style: "display: block" %>
-    <%= form.text_field :longitude %>
-  </div>
-
-  <div>
-    <%= form.label :year_from, style: "display: block" %>
-    <%= form.number_field :year_from %>
-  </div>
-
-  <div>
-    <%= form.label :year_to, style: "display: block" %>
-    <%= form.number_field :year_to %>
-  </div>
-
-  <div>
-    <%= form.label :image, "Изображение", style: "display: block" %>
-    <%= form.file_field :image %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
+  <fieldset><legend>Статья и метка</legend>
+    <div class="editor-field"><%= form.label :name, "Название места" %><%= form.text_field :name, required: true %></div>
+    <div class="editor-columns">
+      <div class="editor-field"><%= form.label :category, "Категория метки" %><%= form.select :category, Place::CATEGORIES.map { |key, label| [label, key] }, include_blank: "Без категории" %></div>
+      <div class="editor-field"><%= form.label :founded, "Даты основания (текст)" %><%= form.text_field :founded, placeholder: "Например: XII–XIII века" %></div>
+      <div class="editor-field"><%= form.label :architectural_style, "Архитектурный стиль" %><%= form.text_field :architectural_style %></div>
+      <div class="editor-field"><%= form.label :architect, "Архитектор" %><%= form.text_field :architect %></div>
+    </div>
+    <div class="editor-field"><%= form.label :address, "Адрес" %><%= form.text_field :address %></div>
+    <div class="editor-columns">
+      <div class="editor-field"><%= form.label :latitude, "Широта" %><%= form.number_field :latitude, step: :any, min: -90, max: 90 %></div>
+      <div class="editor-field"><%= form.label :longitude, "Долгота" %><%= form.number_field :longitude, step: :any, min: -180, max: 180 %></div>
+      <div class="editor-field"><%= form.label :year_from, "Место существует с года" %><%= form.number_field :year_from %></div>
+      <div class="editor-field"><%= form.label :year_to, "По год (пусто — существует сейчас)" %><%= form.number_field :year_to %></div>
+    </div>
+    <div class="editor-field"><%= form.label :description, "Основной текст статьи" %><%= form.text_area :description, rows: 12 %></div>
+    <div class="editor-field">
+      <%= form.label :image, "Обложка статьи" %><%= form.hidden_field :image_cache %>
+      <% if place.image.present? %><%= image_tag place.image.url, class: "editor-cover", alt: place.name %><label><%= form.check_box :remove_image %> Удалить обложку</label><% end %>
+      <%= form.file_field :image, accept: "image/jpeg,image/png,image/webp,image/gif" %>
+    </div>
+  </fieldset>
+  <section><h2>Исторические периоды</h2>
+    <div data-nested-periods-target="list">
+      <%= form.fields_for :historical_states do |period_form| %><%= render "historical_state_fields", form: period_form %><% end %>
+    </div>
+    <template data-nested-periods-target="template">
+      <%= form.fields_for :historical_states, HistoricalState.new, child_index: "NEW_PERIOD" do |period_form| %><%= render "historical_state_fields", form: period_form %><% end %>
+    </template>
+    <button type="button" data-action="nested-periods#add">+ Добавить исторический период</button>
+  </section>
+  <fieldset><legend>Архив</legend>
+    <%= render "gallery_fields", form: form, column: :photo_images, label: "Добавить архивные фотографии" %>
+    <%= render "gallery_fields", form: form, column: :map_images, label: "Добавить карты и планы" %>
+    <%= render "gallery_fields", form: form, column: :object_images, label: "Добавить изображения предметов" %>
+  </fieldset>
+  <div class="editor-field"><%= form.label :sources, "Источники и ссылки (каждый с новой строки)" %><%= form.text_area :sources, rows: 6 %></div>
+  <div class="editor-save"><%= form.submit "Сохранить статью" %><%= link_to "Отмена", place.persisted? ? admin_place_path(place) : admin_places_path %></div>
 <% end %>

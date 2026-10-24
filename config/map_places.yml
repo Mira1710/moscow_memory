@@ -1,0 +1,3 @@
+# Legacy configuration retained for reference only.
+# Article metadata and categories are now edited in /places/:id/edit and stored in PostgreSQL.
+{}

@@ -1,0 +1,16 @@
+<% content_for :content do %>
+  <div class="moscow-memory section-page <%= "about-page" if action_name == "about" %>">
+    <%= render "shared/sidebar", active_section: action_name %>
+    <main <%= 'data-controller="about-story"'.html_safe if action_name == "about" %>>
+      <% if action_name == "about" %>
+        <%= yield %>
+      <% else %>
+      <section class="section-content">
+        <%= yield %>
+      </section>
+      <%= link_to "← Вернуться к карте", root_path, class: "back-to-map" %>
+      <% end %>
+    </main>
+  </div>
+<% end %>
+<%= render template: "layouts/application" %>

@@ -1,0 +1,23 @@
+<fieldset class="editor-period" data-nested-periods-target="period" data-controller="period-sections">
+  <legend>Исторический период</legend>
+  <%= form.hidden_field :id if form.object.persisted? %>
+  <%= form.hidden_field :_destroy, value: "0", data: { period_destroy: true } %>
+  <div class="editor-field"><%= form.label :title, "Название периода" %><%= form.text_field :title %></div>
+  <div class="editor-columns">
+    <div class="editor-field"><%= form.label :year_from, "Год начала" %><%= form.number_field :year_from %></div>
+    <div class="editor-field"><%= form.label :year_to, "Год окончания (если есть)" %><%= form.number_field :year_to %></div>
+  </div>
+  <div class="editor-field"><%= form.label :description, "Текст периода" %><%= form.text_area :description, rows: 7 %></div>
+  <%= render "gallery_fields", form: form, column: :images, label: "Добавить фотографии периода" %>
+  <% [[:preserved, "Сохранившееся"], [:lost, "Утраченное"]].each do |key, label| %>
+    <div class="editor-optional-section">
+      <label class="editor-section-checkbox"><%= form.check_box "show_#{key}", data: { action: "period-sections#toggle", section_key: key } %> Показывать блок «<%= label %>»</label>
+      <div data-period-sections-target="section" data-section-key="<%= key %>" <%= "hidden" unless form.object.public_send("show_#{key}") %>>
+        <div class="editor-field"><%= form.label "#{key}_text", "#{label}: текст" %><%= form.text_area "#{key}_text", rows: 5 %></div>
+        <%= render "gallery_fields", form: form, column: "#{key}_images", label: "#{label}: добавить фотографии" %>
+      </div>
+    </div>
+  <% end %>
+  <p class="editor-help">Снятая галочка скрывает блок в статье. Текст и фотографии сохраняются — блок можно включить снова.</p>
+  <button type="button" class="editor-remove" data-action="nested-periods#remove">Убрать этот период</button>
+</fieldset>

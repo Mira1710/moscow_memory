@@ -1,0 +1,8 @@
+<% content_for :title, "Вход в админку — Москведение" %>
+<div class="editor-page admin-login"><h1>Вход в админку</h1>
+<% if flash[:alert] %><p role="alert"><%= flash[:alert] %></p><% end %>
+<%= form_with url: admin_session_path, class: "article-editor", data: { turbo: false } do |form| %>
+  <div class="editor-field"><%= form.label :email, "Почта" %><%= form.email_field :email, required: true, autocomplete: "username" %></div>
+  <div class="editor-field"><%= form.label :password, "Пароль" %><%= form.password_field :password, required: true, autocomplete: "current-password" %></div>
+  <div class="editor-save"><%= form.submit "Войти" %></div>
+<% end %></div>

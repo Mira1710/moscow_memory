@@ -1,11 +1,2 @@
-<% content_for :title, "New place" %>
-
-<h1>New place</h1>
-
-<%= render "form", place: @place %>
-
-<br>
-
-<div>
-  <%= link_to "Back to places", places_path %>
-</div>
+<% content_for :title, "Добавить место и статью — Москведение" %>
+<div class="editor-page"><nav><%= link_to "← Архив", admin_places_path %></nav><h1>Добавить место и статью</h1><%= render "form", place: @place %></div>

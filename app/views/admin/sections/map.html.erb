@@ -1,0 +1,3 @@
+<% content_for :title, "Метки карты — админка" %>
+<div class="editor-page"><h1>Метки карты</h1><p>Изменяйте координаты и категорию в редакторе объекта.</p>
+<div class="editor-place-list"><% @places.each do |place| %><article><h2><%= place.name %></h2><p><%= Place::CATEGORIES[place.category] || "Без категории" %> · <%= place.latitude || "Нет широты" %>, <%= place.longitude || "нет долготы" %></p><%= link_to "Редактировать метку и статью", edit_admin_place_path(place) %></article><% end %></div></div>

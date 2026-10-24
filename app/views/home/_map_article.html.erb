@@ -1,0 +1,55 @@
+<% settings = map_place_settings(place) %>
+<div class="article-cover">
+  <% if place.image.present? %><%= image_tag place.image.url, class: "place-image", alt: place.name %><% end %>
+</div>
+<h2 tabindex="-1"><%= place.name %></h2>
+<dl class="article-facts">
+  <dt>Категория метки:</dt><dd><%= HomeHelper::MAP_CATEGORIES[map_place_category(place)] || "Не указана" %></dd>
+  <dt>Даты основания:</dt><dd><%= settings["founded"].presence || place.year_from || "Не указаны" %></dd>
+  <% if settings["style"].present? %><dt>Архитектурный стиль:</dt><dd><%= settings["style"] %></dd><% end %>
+  <% if settings["architect"].present? %><dt>Архитектор:</dt><dd><%= settings["architect"] %></dd><% end %>
+  <dt>Адрес:</dt><dd><%= place.address.presence || "Не указан" %></dd>
+</dl>
+<%= simple_format(place.description) %>
+<h3 class="article-section-title">Исторические периоды</h3>
+<% place.historical_states.sort_by { |state| state.year_from || -9999 }.each do |state| %>
+  <details class="historical-state" open data-from="<%= state.year_from %>" data-to="<%= state.year_to %>">
+    <summary><h3><%= state.title %></h3><span><%= state.year_from || "?" %> — <%= state.year_to || "настоящее время" %></span></summary>
+    <div class="period-content">
+      <div class="article-photo-grid">
+        <% photos = state.images %>
+        <% if photos.any? %><% photos.each do |photo| %><%= image_tag photo.url, alt: "#{place.name}: #{state.title}", loading: "lazy" %><% end %>
+        <% else %><div class="article-photo-placeholder" aria-label="Место для фотографии"></div><div class="article-photo-placeholder" aria-label="Место для фотографии"></div><% end %>
+      </div>
+      <%= simple_format(state.description) %>
+      <% [[:preserved, "Сохранившееся"], [:lost, "Утраченное"]].each do |key, label| %>
+        <% if state.public_send("show_#{key}") %>
+          <section class="period-subsection" data-period-section="<%= key %>">
+            <h4><%= label %></h4>
+            <div class="article-photo-grid">
+              <% state.public_send("#{key}_images").each do |photo| %><%= image_tag photo.url, alt: "#{place.name}: #{label}", loading: "lazy" %><% end %>
+            </div>
+            <%= simple_format(state.public_send("#{key}_text")) %>
+          </section>
+        <% end %>
+      <% end %>
+    </div>
+  </details>
+<% end %>
+<% if place.historical_states.empty? %><p>Исторические периоды пока не добавлены.</p><% end %>
+<section class="article-archive">
+  <h3 class="article-section-title">Архив</h3>
+  <% { "photo_images" => "Фото", "map_images" => "Карты и планы", "object_images" => "Предметы" }.each do |folder, label| %>
+    <h4><%= label %></h4>
+    <% images = place.public_send(folder) %>
+    <div class="article-photo-grid">
+      <% if images.any? %><% images.each do |photo| %><%= image_tag photo.url, alt: "#{place.name}: #{label}", loading: "lazy" %><% end %>
+      <% else %><div class="article-photo-placeholder" aria-label="Место для архивного материала"></div><div class="article-photo-placeholder" aria-label="Место для архивного материала"></div><% end %>
+    </div>
+  <% end %>
+</section>
+<details class="article-extra"><summary>Звуки</summary><p>Аудиоматериалы пока не добавлены.</p></details>
+<details class="article-extra"><summary>Источники</summary>
+  <% if (sources = place.sources).present? %><%= simple_format(sources) %><% else %><p>Источники пока не добавлены.</p><% end %>
+</details>
+<% if admin_interface? %><%= link_to "Редактировать статью", edit_admin_place_path(place), class: "article-object-link" %><% end %>

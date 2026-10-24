@@ -1,0 +1,16 @@
+<div class="editor-gallery">
+  <%= form.hidden_field "#{column}_cache" %>
+  <% images = form.object.public_send(column) %>
+  <% if images.any? %>
+    <div class="editor-previews">
+      <% images.each do |image| %>
+        <label class="editor-preview"><%= image_tag image.url, alt: "Загруженное изображение" %>
+          <span><%= check_box_tag "#{form.object_name}[remove_#{column}][]", image.identifier, false %> Удалить фото</span>
+        </label>
+      <% end %>
+    </div>
+  <% end %>
+  <%= form.label "new_#{column}", label %>
+  <%= form.file_field "new_#{column}", multiple: true, accept: "image/jpeg,image/png,image/webp,image/gif" %>
+  <p class="editor-help">Можно выбрать несколько файлов. Новые изображения добавятся к сохранённым.</p>
+</div>

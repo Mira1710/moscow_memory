@@ -36,3 +36,8 @@
 /public/uploads
 /public/autoupload/
 
+
+# Local system files and database backups
+.DS_Store
+*.sql
+*.dump

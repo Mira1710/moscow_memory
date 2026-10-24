@@ -1,0 +1,99 @@
+/* Four successive sticky scenes. Only the main column scrolls. */
+.moscow-memory.section-page.about-page main {
+  position: relative;
+  display: block;
+  height: 100%;
+  padding: 0;
+  overflow-x: clip;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  overscroll-behavior-y: contain;
+  scrollbar-gutter: stable;
+}
+.moscow-memory.about-page .about-scene {
+  --scene-top: 0px;
+  position: sticky;
+  top: var(--scene-top);
+  min-height: 100%;
+  padding: clamp(28px, 4vw, 70px) clamp(20px, 2.3vw, 48px);
+  border-top: 1px solid #aaa;
+  background-color: var(--paper);
+  background-image: linear-gradient(#dedede66 1px, transparent 1px), linear-gradient(90deg, #dedede66 1px, transparent 1px);
+  background-size: 8vw 8vw;
+}
+.moscow-memory.about-page .about-scene:nth-of-type(1) { z-index: 1; border-top: 0; }
+.moscow-memory.about-page .about-scene:nth-of-type(2) { z-index: 2; }
+.moscow-memory.about-page .about-scene:nth-of-type(3) { z-index: 3; }
+.moscow-memory.about-page .about-scene:nth-of-type(4) { z-index: 4; }
+.moscow-memory.about-page .about-depth { transform: translateY(var(--depth-offset, 0px)); will-change: transform; }
+.moscow-memory.about-page :is(h1, .about-display) { font-family: "Aempirial", serif; font-size: clamp(42px, 4.8vw, 88px); line-height: 1.05; text-transform: uppercase; font-weight: 400; color: var(--red); margin: 0 0 clamp(32px, 5vh, 60px); }
+.moscow-memory.about-page .about-subtitle { font-family: "Aempirial", serif; text-transform: uppercase; font-size: clamp(30px, 2.7vw, 50px); line-height: 1.1; font-weight: 400; margin: 0 0 28px; }
+.moscow-memory.about-page p { font-weight: 350; font-size: clamp(13px, 1.12vw, 19px); line-height: 1.5; }
+.moscow-memory.about-page .about-kicker { margin: 0 0 16px; font-size: 11px; text-transform: uppercase; letter-spacing: .15em; color: #888; }
+.moscow-memory.about-page .about-intro-copy { margin-top: 6vh; }
+.moscow-memory.about-page .about-question { width: 260px; margin-top: 24px; text-align: center; font-family: "Aempirial", serif; font-size: clamp(70px, 8vw, 130px); line-height: 1; }
+.moscow-memory.about-page .about-time-bridge { display: flex; width: min(290px, 90%); align-items: center; margin-top: 12px; }
+.moscow-memory.about-page .about-time-bridge span { border: 1px solid var(--red); border-radius: 12px 4px; padding: 5px 14px; background: var(--paper); }
+.moscow-memory.about-page .about-time-bridge i { height: 1px; background: var(--red); flex: 1; }
+.moscow-memory.about-page .about-next { position: absolute; bottom: 28px; left: clamp(20px, 2.3vw, 48px); color: #777; font-size: 12px; text-underline-offset: 5px; }
+.moscow-memory.about-page .about-narrow-copy { max-width: 400px; margin-bottom: 30px; }
+.moscow-memory.about-page .about-evidence-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin-top: 5vh; }
+.moscow-memory.about-page .about-image { margin: 0; min-width: 0; }
+.moscow-memory.about-page .about-image img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: var(--image-fit, cover); object-position: var(--image-position, 50% 50%); }
+.moscow-memory.about-page .about-image-placeholder { display: flex; flex-direction: column; justify-content: center; gap: 14px; aspect-ratio: 1; border: 1px solid #ccc; padding: 14px; background: #f8f8f8; color: #777; text-align: center; }
+.moscow-memory.about-page .about-image-placeholder small { font-size: 10px; overflow-wrap: anywhere; opacity: .7; }
+.moscow-memory.about-page figcaption { text-align: center; font-size: clamp(10px, .9vw, 15px); font-weight: 350; line-height: 1.45; padding: 16px 4px 0; }
+.moscow-memory.about-page .about-how-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4vh 24px; align-items: start; }
+.moscow-memory.about-page .about-how-copy .about-display { font-size: clamp(34px, 3.5vw, 66px); white-space: normal; }
+.moscow-memory.about-page .about-how-copy p { margin-top: 6vh; }
+.moscow-memory.about-page .about-map-image :is(img, .about-image-placeholder) { aspect-ratio: 1.2; }
+.moscow-memory.about-page .about-timeline-copy { align-self: center; }
+.moscow-memory.about-page .about-map-link { display: inline-block; margin-top: 18px; text-underline-offset: 4px; }
+.moscow-memory.about-page .about-mini-timeline { display: flex; justify-content: space-between; gap: 5px; margin-top: 12px; position: relative; }
+.moscow-memory.about-page .about-mini-timeline::before { content: ""; position: absolute; top: 50%; width: 100%; border-top: 1px solid var(--red); }
+.moscow-memory.about-page .about-mini-timeline span { z-index: 1; padding: 4px 8px; border: 1px solid var(--red); border-radius: 12px 3px; background: var(--paper); font-size: .9em; }
+.moscow-memory.about-page .about-more-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: center; }
+.moscow-memory.about-page .about-more-copy p { margin-top: 7vh; }
+.moscow-memory.about-page .about-launch-visual { position: relative; min-width: 0; }
+.moscow-memory.about-page .about-launch-map { filter: blur(3px); opacity: .6; }
+.moscow-memory.about-page .about-launch-map :is(img, .about-image-placeholder) { aspect-ratio: .95; }
+.moscow-memory.about-page .about-launch-card { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 75%; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background: var(--paper); box-shadow: 0 4px 20px #0001; }
+.moscow-memory.about-page .about-launch-card h3 { font-size: clamp(18px, 1.6vw, 28px); }
+.moscow-memory.about-page .about-launch-card p { font-size: clamp(11px, .95vw, 16px); }
+.moscow-memory.about-page .about-launch-card .about-launch-note { color: #777; font-size: 11px; }
+.moscow-memory.about-page .about-launch-link { display: block; padding: 10px; margin-top: 20px; text-align: center; color: #f8f8f8; background: var(--red); border-radius: 5px; text-decoration: none; }
+.moscow-memory.about-page .about-footer { position: relative; z-index: 5; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; padding: 28px; background: #e1e1e1; border-top: 1px solid #aaa; font-size: 11px; }
+@media(max-width: 800px) {
+  .moscow-memory.about-page .about-evidence-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .moscow-memory.about-page .about-how-grid, .moscow-memory.about-page .about-more-grid { grid-template-columns: 1fr; }
+  .moscow-memory.about-page .about-timeline-copy { margin-top: 35px; }
+  .moscow-memory.about-page .about-map-image :is(img, .about-image-placeholder) { max-height: 340px; aspect-ratio: 1.4; }
+  .moscow-memory.about-page .about-how-copy p { margin-top: 24px; }
+  .moscow-memory.about-page .about-launch-visual { max-width: 450px; }
+}
+@media(max-width: 500px) {
+  .moscow-memory.about-page .about-scene { padding: 28px 16px 65px; }
+  .moscow-memory.about-page .about-evidence-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .moscow-memory.about-page .about-time-bridge, .moscow-memory.about-page .about-question { max-width: 100%; }
+  .moscow-memory.about-page .about-launch-card { width: 88%; padding: 12px; }
+  .moscow-memory.about-page .about-mini-timeline { flex-wrap: wrap; }
+  .moscow-memory.about-page .about-mini-timeline span { font-size: 10px; }
+}
+@media(prefers-reduced-motion: reduce) {
+  .moscow-memory.section-page.about-page main { scroll-behavior: auto; }
+  .moscow-memory.about-page .about-scene { position: relative; top: auto; }
+  .moscow-memory.about-page .about-depth { transform: none !important; will-change: auto; }
+}
+
+/* Independent scene for the timeline: each tutorial now enters separately. */
+.moscow-memory.about-page .about-scene:nth-of-type(5) { z-index: 5; }
+.moscow-memory.about-page .about-footer { z-index: 6; }
+.moscow-memory.about-page .about-timeline .about-timeline-copy { align-self: start; margin-top: 0; }
+/* Show the whole map image at its original proportions, without clipping labels. */
+.moscow-memory.about-page .about-image.about-map-image img {
+  aspect-ratio: auto;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+}
+/* Individual image adjustments can be added below, using data-image. */

@@ -1,47 +1,9 @@
-<header>
-  <h1>Архитектурная память Москвы</h1>
-
-  <nav>
-    <%= link_to "Главная", root_path %>
-    <%= link_to "Карта", "#map" %>
-    <%= link_to "Архив", places_path %>
-    <%= link_to "О проекте", "#about" %>
-  </nav>
-</header>
-
-<main>
-  <section>
-    <h2>Москва меняется. Память остаётся.</h2>
-
-    <p>
-      Интерактивный архив архитектурной памяти Москвы.
-      Исследуйте, как менялся город и что находилось
-      на знакомых местах раньше.
-    </p>
-  </section>
-
-  <section id="map">
-    <h2>Карта Москвы</h2>
-
-    <div>
-      Здесь будет интерактивная карта
-    </div>
-  </section>
-
-  <section>
-    <h2>Архитектурные объекты</h2>
-
-    <%= render @places if defined?(@places) %>
-
-    <%= link_to "Смотреть весь архив", places_path %>
-  </section>
-
-  <section id="about">
-    <h2>О проекте</h2>
-
-    <p>
-      Проект помогает увидеть, как менялась архитектурная среда Москвы
-      и какие здания и места существовали здесь в разные периоды.
-    </p>
-  </section>
-</main>
+<% content_for :title, "Архив — Москведение" %>
+<div class="editor-page"><% unless admin_interface? %><nav><%= link_to "← Карта", root_path %> · <%= link_to "Статьи", articles_path %></nav><% end %>
+<h1><%= controller_path.start_with?("admin/") ? "Админка — статьи" : "Архив мест и статей" %></h1>
+<% if admin_interface? %>
+  <div class="admin-toolbar"><%= link_to "+ Добавить место и статью", new_admin_place_path, class: "editor-add-link" %></div>
+<% end %>
+<% if notice.present? %><p role="status"><%= notice %></p><% end %>
+<div class="editor-place-list"><% @places.each do |place| %><article><h2><%= link_to place.name, (controller_path.start_with?("admin/") ? admin_place_path(place) : place_path(place)) %></h2><p><%= place.address %></p><p><%= place.historical_states.size %> исторических периодов</p><% if admin_interface? %><%= link_to "Редактировать статью", edit_admin_place_path(place) %><% end %></article><% end %></div>
+</div>

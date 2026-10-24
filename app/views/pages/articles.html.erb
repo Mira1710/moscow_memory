@@ -1,0 +1,13 @@
+<% content_for :title, "Статьи — Москведение" %>
+<h1>Статьи</h1>
+<p>Материалы об объектах из архива проекта.</p>
+<div class="article-index">
+  <% @places.each do |place| %>
+    <article>
+      <h2><%= link_to place.name, place_path(place) %></h2>
+      <p><%= place.address %></p>
+      <p><%= truncate(strip_tags(place.description.to_s), length: 220) %></p>
+    </article>
+  <% end %>
+  <% if @places.empty? %><p>Материалы пока не добавлены.</p><% end %>
+</div>

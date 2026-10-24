@@ -1,0 +1,21 @@
+.moscow-memory.section-page main {
+  display: block;
+  overflow-y: auto;
+  padding: 3vh 3vw 40px;
+}
+.moscow-memory .section-content {
+  max-width: 980px;
+  padding: clamp(18px, 3vw, 48px);
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+.moscow-memory .section-content > h1 {
+  margin-bottom: 1.5rem;
+  font-size: 2.4em;
+  font-weight: 400;
+}
+.moscow-memory .section-content p { margin: 0 0 1.2rem; line-height: 1.6; }
+.moscow-memory .back-to-map { display: inline-block; margin-top: 24px; }
+.moscow-memory .article-index { display: grid; gap: 20px; }
+.moscow-memory .article-index article { border-top: 1px solid var(--line); padding-top: 20px; }
+.moscow-memory .article-index h2 { font-size: 1.4em; }

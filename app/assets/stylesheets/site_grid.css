@@ -1,0 +1,66 @@
+/* The supplied SVG is the shared page background; cards and navigation remain opaque. */
+.moscow-memory { --site-grid: url("site-grid.svg"); }
+.moscow-memory main,
+.moscow-memory.about-page .about-scene {
+  background-image: var(--site-grid);
+  background-size: 100% auto;
+  background-position: left top;
+  background-repeat: repeat-y;
+}
+.moscow-memory.about-page .about-launch-card {
+  width: min(88%, 550px);
+  padding: clamp(16px, 2vw, 32px);
+  background: #eeeeeeeF;
+  border: 1px solid #aaa;
+  border-radius: 16px;
+}
+.moscow-memory.about-page .about-launch-card h3 {
+  font-family: "Geologica", Arial, sans-serif;
+  font-size: clamp(23px, 2.5vw, 42px);
+  font-weight: 400;
+  line-height: 1.15;
+}
+.moscow-memory.about-page .about-launch-card p {
+  font-size: clamp(12px, 1.25vw, 20px);
+  font-weight: 350;
+}
+.moscow-memory.about-page .about-launch-card input[type=email] {
+  width: 100%;
+  margin: 14px 0;
+  padding: 13px 16px;
+  background: #f7f7f7;
+  border: 1px solid #222;
+  border-radius: 8px;
+  font: inherit;
+}
+.moscow-memory.about-page .about-signup-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 8px 0 24px;
+  font-size: clamp(11px, 1.05vw, 17px);
+  font-weight: 350;
+  line-height: 1.4;
+}
+.moscow-memory.about-page .about-signup-consent input { width: 18px; height: 18px; margin: 0; flex-shrink: 0; accent-color: var(--red); }
+.moscow-memory.about-page .about-launch-card button[type=submit] { width: 100%; border: 0; border-radius: 8px; padding: 13px; color: white; background: var(--red); font-weight: 500; }
+.moscow-memory.about-page .about-launch-card button:disabled { opacity: .5; cursor: default; }
+.moscow-memory.about-page .about-launch-card .about-signup-status { margin: 10px 0 0; font-size: 10px; color: #777; }
+@media(max-width:500px) {
+  .moscow-memory.about-page .about-launch-visual { min-height: 420px; }
+  .moscow-memory.about-page .about-launch-map :is(img, .about-image-placeholder) { min-height: 420px; object-fit: cover; }
+  .moscow-memory.about-page .about-signup-consent { margin-bottom: 16px; }
+}
+
+/* Background-colored backing keeps the grid outside text blocks. */
+.moscow-memory.about-page :is(h1, h2, h3, p, figcaption, .about-map-link) {
+  background-color: var(--paper);
+  box-shadow: 8px 0 var(--paper), -8px 0 var(--paper);
+}
+.moscow-memory.about-page :is(h1, h2, h3, p) {
+  width: fit-content;
+  max-width: 100%;
+}
+.moscow-memory.about-page .about-launch-card {
+  background: var(--paper);
+}

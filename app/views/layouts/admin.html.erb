@@ -1,0 +1,15 @@
+<% content_for :content do %>
+  <div class="admin-shell <%= "admin-auth-screen" unless admin_signed_in? %>">
+    <% if admin_signed_in? %><%= render "admin/shared/sidebar" %><% end %>
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <span class="admin-brand">Москведение <span>· Админка</span></span>
+        <% if admin_signed_in? %>
+          <div class="admin-account"><span class="admin-email"><%= current_admin.email %></span><%= button_to "Выйти из админки", admin_logout_path, method: :delete, class: "admin-logout" %></div>
+        <% end %>
+      </header>
+      <div class="admin-content"><%= yield %></div>
+    </main>
+  </div>
+<% end %>
+<%= render template: "layouts/application" %>
