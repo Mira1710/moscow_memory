@@ -15,7 +15,7 @@ class MapNavigationTest < ApplicationSystemTestCase
           constructor(element) {
             this.behaviors = { disable() {} };
             this.geoObjects = {
-              contains: marker => marker.button.isConnected,
+              indexOf: marker => [...element.children].indexOf(marker.button),
               add: marker => element.append(marker.button),
               remove: marker => marker.button.remove()
             };

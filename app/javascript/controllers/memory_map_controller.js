@@ -174,8 +174,9 @@ export default class extends Controller {
       })
       const marker = this.markers?.get(id)
       if (marker && this.map) {
-        if (visible && !this.map.geoObjects.contains(marker)) this.map.geoObjects.add(marker)
-        if (!visible && this.map.geoObjects.contains(marker)) this.map.geoObjects.remove(marker)
+        const added = this.map.geoObjects.indexOf(marker) !== -1
+        if (visible && !added) this.map.geoObjects.add(marker)
+        if (!visible && added) this.map.geoObjects.remove(marker)
       }
       if (this.selected === id && !visible) this.close()
     })
