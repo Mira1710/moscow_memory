@@ -1,0 +1,20 @@
+<div class="launch-signup" data-controller="launch-signup">
+  <%= form_with url: launch_subscriptions_path, data: { turbo: false, action: "input->launch-signup#validate change->launch-signup#validate submit->launch-signup#submit" } do |form| %>
+    <%= form.hidden_field :source, value: source %>
+    <%= form.label :email, "Электронная почта", for: "#{source}-launch-email", class: "visually-hidden" %>
+    <%= form.email_field :email, id: "#{source}-launch-email", placeholder: "e-mail", autocomplete: "email", required: true, maxlength: 254, data: { launch_signup_target: "email" } %>
+    <label class="launch-consent about-signup-consent">
+      <%= form.check_box :consent, { required: true, data: { launch_signup_target: "consent" } }, "1", "0" %>
+      <span>Согласен на обработку электронной почты для уведомления о запуске проекта</span>
+    </label>
+    <%= form.button "Узнать о запуске", type: "submit", disabled: true, class: "launch-submit", data: { launch_signup_target: "button" } %>
+    <p class="launch-note about-signup-status" role="status" aria-live="polite" data-launch-signup-target="status"></p>
+  <% end %>
+  <dialog class="launch-success-dialog" aria-labelledby="<%= source %>-signup-title" data-launch-signup-target="dialog">
+    <button type="button" class="launch-dialog-close" aria-label="Закрыть уведомление" data-action="launch-signup#close">×</button>
+    <span class="launch-success-mark" aria-hidden="true">✓</span>
+    <h2 id="<%= source %>-signup-title">Спасибо за интерес!</h2>
+    <p>Мы получили вашу заинтересованность и уведомим вас в числе первых о запуске проекта «Москведение».</p>
+    <button type="button" class="launch-dialog-confirm" data-action="launch-signup#close" autofocus>Будем ждать!</button>
+  </dialog>
+</div>

@@ -1,0 +1,20 @@
+<% content_for :title, "Подписчики запуска — админка" %>
+<section class="editor-page subscriptions-page">
+  <h1>Ожидают запуска</h1>
+  <p class="subscription-count">Всего уникальных адресов: <strong><%= @count %></strong></p>
+  <p>Почта сохраняется после согласия посетителя. Рассылка ещё не отправляется — это база для будущего уведомления.</p>
+  <% if @count.zero? %><p>Пока нет подписчиков. Форма доступна на главной и странице «О нас».</p><% else %>
+    <div class="subscriptions-table-wrap"><table class="subscriptions-table">
+      <thead><tr><th scope="col">Почта</th><th scope="col">Дата согласия</th><th scope="col">Страница</th></tr></thead>
+      <tbody><% @subscriptions.each do |subscription| %><tr>
+        <td><%= subscription.email %></td>
+        <td><%= subscription.consent_accepted_at.in_time_zone("Europe/Moscow").strftime("%d.%m.%Y %H:%M") %> МСК</td>
+        <td><%= subscription.source == "about" ? "О нас" : "Главная" %></td>
+      </tr><% end %></tbody>
+    </table></div>
+    <nav class="subscription-pagination" aria-label="Страницы подписчиков">
+      <% if @page > 1 %><%= link_to "← Назад", admin_launch_subscriptions_path(page: @page - 1) %><% end %>
+      <% if @count > @page * 50 %><%= link_to "Далее →", admin_launch_subscriptions_path(page: @page + 1) %><% end %>
+    </nav>
+  <% end %>
+</section>

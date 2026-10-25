@@ -23,13 +23,7 @@
         <section class="card launch-card">
           <h2>Скоро запуск!</h2>
           <p>Оставьте почту, и мы уведомим о начале работы сервиса изучения Москвы</p>
-          <form data-action="submit->memory-map#subscribe input->memory-map#validateSubscription">
-            <label class="visually-hidden" for="launch-email">Электронная почта</label>
-            <input id="launch-email" type="email" placeholder="e-mail" required data-memory-map-target="email">
-            <label class="launch-consent"><input type="checkbox" required data-memory-map-target="consent"> <span>Согласен на обработку персональных данных</span></label>
-            <button class="launch-submit" type="submit" disabled data-memory-map-target="subscribeButton">Узнать о запуске</button>
-            <p class="launch-note" role="status">Форма пока не подключена. Адрес не отправляется.</p>
-          </form>
+          <%= render "shared/launch_signup", source: "map" %>
         </section>
       </div>
       <section class="map-places" aria-label="Метки">

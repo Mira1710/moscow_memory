@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  post "launch_subscriptions", to: "launch_subscriptions#create", as: :launch_subscriptions
+
   namespace :admin do
     get "/", to: "places#index", as: :root
     get "login", to: "sessions#new", as: :login
@@ -11,6 +13,7 @@ Rails.application.routes.draw do
     get "forum", to: "sections#forum", as: :forum
     get "about", to: "sections#about", as: :about
     get "profile", to: "sections#profile", as: :profile
+    resources :launch_subscriptions, only: :index
     resources :places
   end
 

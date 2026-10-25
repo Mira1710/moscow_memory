@@ -21,7 +21,7 @@ function loadMaps(key) {
 }
 
 export default class extends Controller {
-  static targets = ["map", "status", "article", "body", "scroll", "close", "place", "year", "yearLabel", "allYears", "years", "allYearsButton", "sources", "placePeriods", "email", "consent", "subscribeButton"]
+  static targets = ["map", "status", "article", "body", "scroll", "close", "place", "year", "yearLabel", "allYears", "years", "allYearsButton", "sources", "placePeriods"]
   static values = { key: String }
 
   connect() {
@@ -173,15 +173,6 @@ export default class extends Controller {
     panel.hidden = !panel.hidden
     button.setAttribute("aria-expanded", String(!panel.hidden))
     button.querySelector("span").textContent = panel.hidden ? "+" : "−"
-  }
-
-  validateSubscription() {
-    this.subscribeButtonTarget.disabled = !(this.emailTarget.validity.valid && this.consentTarget.checked)
-  }
-
-  subscribe(event) {
-    event.preventDefault()
-    event.currentTarget.querySelector(".launch-note").textContent = "Отправка подписки ещё не подключена. Адрес не отправлен и не сохранён."
   }
 
   showSources(event) { event.preventDefault(); this.sourcesTarget.showModal() }

@@ -65,13 +65,7 @@
       <div class="about-launch-card">
         <h3>Скоро запуск!</h3>
         <p>Оставьте почту, и мы уведомим о начале работы сервиса изучения Москвы</p>
-        <form data-controller="launch-signup" data-action="input->launch-signup#validate submit->launch-signup#submit">
-          <label class="visually-hidden" for="about-launch-email">Электронная почта</label>
-          <input id="about-launch-email" type="email" name="email" autocomplete="email" placeholder="e-mail" required data-launch-signup-target="email">
-          <label class="about-signup-consent"><input type="checkbox" required data-launch-signup-target="consent"><span>Согласен на <u>обработку персональных данных</u></span></label>
-          <button type="submit" disabled data-launch-signup-target="button">Узнать о запуске</button>
-          <p class="about-signup-status" role="status" data-launch-signup-target="status">Форма пока не подключена. Адрес не отправляется.</p>
-        </form>
+        <%= render "shared/launch_signup", source: "about" %>
       </div>
     </div>
   </div>
