@@ -1,7 +1,12 @@
 <% content_for :title, "Архитектурная память Москвы" %>
-<div class="moscow-memory" data-controller="memory-map"
+<div class="moscow-memory map-page" data-controller="memory-map"
      data-memory-map-key-value="<%= ENV.fetch('YANDEX_MAPS_API_KEY', '') %>"
      data-action="keydown.esc@window->memory-map#close turbo:before-cache@document->memory-map#teardown">
+  <header class="mobile-map-header">
+    <%= link_to root_path, class: "mobile-map-logo", aria: { label: "Москведение — главная" } do %><%= image_tag "mobile-logo.svg", alt: "Москведение" %><% end %>
+    <span class="mobile-map-title">Карта</span>
+    <button type="button" class="mobile-menu-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-map-navigation" data-action="memory-map#toggleMenu"><span></span><span></span><span></span></button>
+  </header>
   <%= render "shared/sidebar", active_section: "map" %>
   <main>
     <section class="map-layout" aria-label="Карта и статья">

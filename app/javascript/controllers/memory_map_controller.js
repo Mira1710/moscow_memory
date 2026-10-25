@@ -31,7 +31,17 @@ export default class extends Controller {
     this.step = 10
     this.renderYears()
     this.filter()
+    if (window.matchMedia("(max-width: 767px)").matches) {
+      this.element.querySelectorAll(".panel-toggle").forEach(button => {
+        const panel = this.element.querySelector(`#${button.getAttribute("aria-controls")}`)
+        panel.hidden = false
+        button.setAttribute("aria-expanded", "true")
+        button.querySelector("span").textContent = "−"
+      })
+    }
     this.start()
+    this.onViewportChange = () => { this.closeMenu(); this.renderYears() }
+    window.addEventListener("resize", this.onViewportChange)
   }
 
   async start() {
@@ -44,6 +54,8 @@ export default class extends Controller {
       if (this.disposed) return
       this.map = new ymaps.Map(this.mapTarget, { center: [55.7558, 37.6176], zoom: 12, controls: ["zoomControl"] })
       this.map.behaviors.disable("scrollZoom")
+      this.mapResizeObserver = new ResizeObserver(() => this.map?.container?.fitToViewport())
+      this.mapResizeObserver.observe(this.mapTarget)
       this.placeTargets.forEach(template => {
         const { latitude, longitude, placeId } = template.dataset
         if (!latitude.trim() || !longitude.trim()) return
@@ -70,7 +82,7 @@ export default class extends Controller {
   renderYears() {
     const current = new Date().getFullYear()
     const selected = Number(this.yearTarget.value)
-    const start = this.step === 1 ? Math.min(selected - 4, current - 9) : this.step === 50 ? 1900 : 1940
+    const start = this.step === 1 ? Math.min(selected - 4, current - 9) : this.step === 50 ? 1900 : window.matchMedia("(max-width: 767px)").matches ? 2000 : 1940
     const end = this.step === 1 ? Math.min(start + 9, current) : current
     let years = []
     for (let year = start; year <= end; year += this.step) years.push(year)
@@ -109,6 +121,10 @@ export default class extends Controller {
       item.style.flex = `${Math.max(0, overlap)} 1 0`
     })
     this.updateYearButtons()
+    if (window.matchMedia("(max-width: 767px)").matches) {
+      const selectedButton = this.yearsTarget.querySelector('[aria-pressed="true"]')
+      this.yearsTarget.scrollLeft = selectedButton ? selectedButton.offsetLeft - this.yearsTarget.clientWidth / 2 : this.yearsTarget.scrollWidth
+    }
   }
 
   updateYearButtons() {
@@ -134,6 +150,21 @@ export default class extends Controller {
   showAllYears() {
     this.allYearsTarget.checked = true
     this.filter()
+  }
+
+  toggleMenu() {
+    const open = !this.element.classList.contains("mobile-menu-open")
+    this.element.classList.toggle("mobile-menu-open", open)
+    const button = this.element.querySelector(".mobile-menu-toggle")
+    button.setAttribute("aria-expanded", String(open))
+    button.setAttribute("aria-label", open ? "Закрыть меню" : "Открыть меню")
+  }
+
+  closeMenu() {
+    this.element.classList.remove("mobile-menu-open")
+    const button = this.element.querySelector(".mobile-menu-toggle")
+    button?.setAttribute("aria-expanded", "false")
+    button?.setAttribute("aria-label", "Открыть меню")
   }
 
   togglePanel(event) {
@@ -213,6 +244,7 @@ export default class extends Controller {
   }
 
   close() {
+    this.closeMenu()
     if (this.articleTarget.hidden) return
     this.articleTarget.hidden = true
     this.element.classList.remove("article-open")
@@ -234,6 +266,8 @@ export default class extends Controller {
 
   teardown() {
     this.disposed = true
+    window.removeEventListener("resize", this.onViewportChange)
+    this.mapResizeObserver?.disconnect()
     this.close()
     if (this.sourcesTarget.open) this.sourcesTarget.close()
     this.map?.destroy()

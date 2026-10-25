@@ -1,0 +1,165 @@
+/* Mobile map and article layouts. Desktop rules remain in memory_map.css.
+   map-page scopes these rules away from the admin and other public pages. */
+.mobile-map-header { display: none; }
+
+@media (max-width: 767px) {
+  .moscow-memory.map-page {
+    --mobile-header: 82px;
+    --mobile-gutter: 14px;
+    --mobile-map-height: clamp(360px, calc(100svh - 285px), 650px);
+    height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-size: 12px;
+    font-weight: 350;
+    scrollbar-width: thin;
+  }
+  .moscow-memory.map-page .mobile-map-header {
+    display: grid;
+    grid-template-columns: 82px minmax(0, 1fr) 80px;
+    position: sticky;
+    top: 0;
+    z-index: 8;
+    height: var(--mobile-header);
+    margin: 14px var(--mobile-gutter) 12px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+  }
+  .moscow-memory.map-page .mobile-map-logo {
+    display: grid;
+    place-items: center;
+    border-right: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .moscow-memory.map-page .mobile-map-logo img { width: 76px; height: 80px; object-fit: contain; }
+  .moscow-memory.map-page .mobile-map-title {
+    display: grid;
+    place-items: center;
+    font: 42px/1 "Aempirial", serif;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+  .moscow-memory.map-page .mobile-menu-toggle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border: 0;
+    border-left: 1px solid var(--line);
+    background: transparent;
+    min-height: 44px;
+  }
+  .moscow-memory.map-page .mobile-menu-toggle span { width: 18px; height: 1px; background: currentColor; transition: transform .15s; }
+  .moscow-memory.map-page.mobile-menu-open .mobile-menu-toggle span:first-child { transform: translateY(6px) rotate(45deg); }
+  .moscow-memory.map-page.mobile-menu-open .mobile-menu-toggle span:nth-child(2) { opacity: 0; }
+  .moscow-memory.map-page.mobile-menu-open .mobile-menu-toggle span:last-child { transform: translateY(-6px) rotate(-45deg); }
+  .moscow-memory.map-page .sidebar { display: none; }
+  .moscow-memory.map-page.mobile-menu-open .sidebar {
+    display: block;
+    position: fixed;
+    inset: 108px 14px auto;
+    z-index: 7;
+    width: auto;
+    max-height: calc(100dvh - 122px);
+    overflow-y: auto;
+    box-shadow: 0 12px 30px #0002;
+  }
+  .moscow-memory.map-page .sidebar :is(.logo, .coords) { display: none; }
+  .moscow-memory.map-page .sidebar .menu-link { min-height: 48px; padding: 12px 18px; font-size: 15px; }
+  .moscow-memory.map-page .sidebar .menu-icon { position: static; opacity: 1; width: 30px; height: 30px; }
+  .moscow-memory.map-page main {
+    display: grid;
+    grid-template-rows: var(--mobile-map-height) auto 50px auto;
+    height: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0 var(--mobile-gutter);
+    border: 0;
+    background-size: 100% auto;
+  }
+  .moscow-memory.map-page .map-layout { width: 100%; border-radius: 5px 0 0 5px; }
+  .moscow-memory.map-page .intro-stack { display: none; }
+  .moscow-memory.map-page :is(.map-places, .interval) { width: 176px; min-width: 0; max-width: 62%; }
+  .moscow-memory.map-page .map-places { border-radius: 0 0 0 8px; overflow: hidden; }
+  .moscow-memory.map-page .panel-toggle { min-height: 32px; padding: 5px 8px; font-size: 13px; }
+  .moscow-memory.map-page .map-places .place-list { padding: 2px 5px 6px; max-height: min(360px, calc(var(--mobile-map-height) - 160px)); }
+  .moscow-memory.map-page .category-filter { min-height: 31px; gap: 5px; padding: 4px 0; font-size: 10px; line-height: 1.2; }
+  .moscow-memory.map-page .category-icon { width: 19px; height: 22px; flex-basis: 19px; }
+  .moscow-memory.map-page .category-icon-empty { width: 17px; height: 19px; margin: 1px; flex-basis: 17px; }
+  .moscow-memory.map-page .map-object-list { margin-top: 4px; font-size: 11px; }
+  .moscow-memory.map-page .map-object-list summary { min-height: 32px; padding-top: 7px; cursor: pointer; }
+  .moscow-memory.map-page .place-link { min-height: 32px; margin: 0; padding: 5px 0; }
+  .moscow-memory.map-page .interval { bottom: 0; border-radius: 8px 0 0 0; overflow: hidden; }
+  .moscow-memory.map-page .interval-buttons { gap: 5px; padding: 6px; }
+  .moscow-memory.map-page .interval-buttons button { min-height: 32px; flex: 1; padding: 5px 3px; font-size: 11px; }
+  .moscow-memory.map-page .all-years { padding: 0 8px 7px; font-size: 10px; }
+  .moscow-memory.map-page .map-status { inset: auto 8px 110px; font-size: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 6px; }
+  .moscow-memory.map-page .timeline { height: auto; min-height: 82px; margin: 0 -14px; padding-top: 4px; overflow: hidden; }
+  .moscow-memory.map-page .year-track { min-height: 38px; gap: 28px; padding: 4px 14px 8px; overflow-x: auto; scrollbar-width: none; }
+  .moscow-memory.map-page .year-track::-webkit-scrollbar { display: none; }
+  .moscow-memory.map-page .year-track::before { width: max(100%, 960px); right: auto; }
+  .moscow-memory.map-page .year-track button { flex: 0 0 66px; min-width: 66px; padding: 5px; font-size: 12px; }
+  .moscow-memory.map-page :is(.period-track, .style-track) { display: flex; min-height: 20px; margin: 0 14px; }
+  .moscow-memory.map-page .period-track button { padding: 3px 2px; font-size: 10px; }
+  .moscow-memory.map-page .style-track span { padding-top: 3px; font-size: 10px; }
+  .moscow-memory.map-page .layout-spacer { min-height: 40px; }
+  .moscow-memory.map-page .site-footer {
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 24px;
+    margin: 0 -14px;
+    min-height: 110px;
+    padding: 12px 15px max(16px, env(safe-area-inset-bottom));
+    font-size: 11px;
+    line-height: 1.35;
+    background-color: #e3e3e3;
+    background-image: var(--site-grid);
+    background-size: 100% auto;
+  }
+  .moscow-memory.map-page .site-footer > :nth-child(3) { grid-column: 2; grid-row: 1; }
+  .moscow-memory.map-page .site-footer > :nth-child(2) { grid-column: 2; grid-row: 2; }
+  .moscow-memory.map-page .site-footer > :nth-child(4) { grid-column: 1; grid-row: 2; }
+
+  /* The selected-place screen keeps a compact map above the article scroller. */
+  .moscow-memory.map-page.article-open { overflow: hidden; }
+  .moscow-memory.map-page.article-open .mobile-map-header { margin-top: 0; margin-bottom: 0; height: 64px; grid-template-columns: 64px 1fr 64px; }
+  .moscow-memory.map-page.article-open .mobile-map-logo img { height: 60px; }
+  .moscow-memory.map-page.article-open .mobile-map-title { font-size: 32px; }
+  .moscow-memory.map-page.article-open main { height: calc(100dvh - 64px); grid-template-rows: 145px minmax(0, 1fr); padding-top: 8px; }
+  .moscow-memory.map-page.article-open .map-layout { grid-row: 1; border-radius: 0; }
+  .moscow-memory.map-page.article-open :is(.map-places, .interval, .timeline, .layout-spacer, .site-footer) { display: none; }
+  .moscow-memory.map-page.article-open .map-status { inset: 8px; font-size: 11px; }
+  .moscow-memory.map-page .article {
+    position: relative;
+    inset: auto;
+    grid-row: 2;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    border: 1px solid var(--line);
+    border-top: 0;
+    background: var(--paper);
+    overflow: hidden;
+  }
+  .moscow-memory.map-page .article-scroll { height: 100%; padding: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .moscow-memory.map-page .article-body { padding: 0 12px 24px; font-size: 13px; font-weight: 350; }
+  .moscow-memory.map-page .article-cover { height: 180px; margin: 0 -12px 20px; }
+  .moscow-memory.map-page .article-body > h2 { font: 48px/1 "Aempirial", serif; margin-bottom: 20px; }
+  .moscow-memory.map-page .close-article { top: 6px; right: 6px; width: 40px; height: 40px; border-radius: 50%; background: #f8f8f8ed; }
+  .moscow-memory.map-page .article-body p { font-size: 13px; line-height: 1.55; margin-bottom: 14px; }
+  .moscow-memory.map-page .article-facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 8px; font-size: 11px; }
+  .moscow-memory.map-page .article-facts dd { margin: 0; }
+  .moscow-memory.map-page .article-body .article-section-title { font-size: 20px; margin: 24px 0 12px; }
+  .moscow-memory.map-page .historical-state > summary { min-height: 44px; padding: 10px 28px 10px 8px; font-size: 12px; }
+  .moscow-memory.map-page .article-photo-grid { gap: 8px; margin-bottom: 12px; }
+  .moscow-memory.map-page .period-subsection h4 { margin: 14px 0 8px; font-size: 15px; }
+  .moscow-memory.map-page .article-extra > summary { min-height: 34px; padding-top: 6px; }
+  .moscow-memory.map-page.mobile-menu-open .sidebar { top: 108px; }
+  .moscow-memory.map-page.article-open.mobile-menu-open .sidebar { top: 64px; }
+}
+@media (max-width: 350px) {
+  .moscow-memory.map-page { --mobile-gutter: 10px; }
+  .moscow-memory.map-page .mobile-map-header { grid-template-columns: 70px minmax(0, 1fr) 60px; }
+  .moscow-memory.map-page .article-facts { display: block; }
+  .moscow-memory.map-page .article-facts dd { margin-bottom: 6px; }
+}
