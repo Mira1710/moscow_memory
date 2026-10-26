@@ -7,14 +7,19 @@
 <h1 class="visually-hidden">Статьи</h1>
 <div class="article-catalogue">
   <% @article_sections.each do |section| %>
-    <section class="article-topic-section" aria-labelledby="article-topic-<%= section.fetch("id") %>">
+    <section class="article-topic-section article-topic-section--<%= section.fetch("id") %>" aria-labelledby="article-topic-<%= section.fetch("id") %>">
+      <% image = "article_sections/#{section.fetch("image")}" %>
+      <% active_image = section["active_image"] && "article_sections/#{section.fetch("active_image")}" %>
+      <div class="article-topic-image" aria-hidden="true">
+        <% if Rails.root.join("app/assets/images", image).file? %>
+          <%= image_tag image, alt: "", class: "article-topic-art article-topic-art--default", loading: "lazy" %>
+          <% if active_image && Rails.root.join("app/assets/images", active_image).file? %>
+            <%= image_tag active_image, alt: "", class: "article-topic-art article-topic-art--active", loading: "lazy" %>
+          <% end %>
+        <% end %>
+      </div>
       <div class="article-topic-header">
         <div><h2 id="article-topic-<%= section.fetch("id") %>"><%= section.fetch("title") %></h2><p><%= section.fetch("description") %></p></div>
-        <% image = "article_sections/#{section.fetch("image")}" %>
-        <div class="article-topic-image">
-          <% if Rails.root.join("app/assets/images", image).file? %><%= image_tag image, alt: section.fetch("title"), loading: "lazy" %>
-          <% else %><div class="article-topic-placeholder" role="img" aria-label="Место для изображения раздела «<%= section.fetch("title") %>»"></div><% end %>
-        </div>
       </div>
       <div class="article-topic-cards">
         <% section.fetch("cards").each do |card| %>

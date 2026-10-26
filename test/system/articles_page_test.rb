@@ -9,6 +9,8 @@ class ArticlesPageTest < ApplicationSystemTestCase
     visit articles_path
     assert_selector ".article-topic-section", count: 3
     assert_selector ".article-topic-card", count: 9
+    assert_selector ".article-topic-art--active", count: 2, visible: :all
+    assert_equal 0, page.evaluate_script("[...document.querySelectorAll('.article-topic-image img')].filter(img => img.complete && img.naturalWidth === 0).length")
     page.save_screenshot(Rails.root.join("tmp/screenshots/articles-desktop.png"))
     card = first(".article-topic-card")
     if page.evaluate_script('matchMedia("(hover: hover)").matches')

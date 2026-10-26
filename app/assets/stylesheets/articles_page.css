@@ -39,3 +39,34 @@
 }
 
 .moscow-memory.articles-page .catalogue-results > h2 { font: 400 40px/1 "Aempirial", serif; margin: 6px 0 12px; }
+
+/* The artwork occupies the section height behind opaque text frames. */
+.articles-page .article-topic-section { position:relative; isolation:isolate; overflow:hidden; transition:border-color 350ms ease; }
+.articles-page .article-topic-header { position:relative; z-index:1; display:block; padding-right:36%; }
+.articles-page .article-topic-header > div { background:var(--paper); }
+.moscow-memory.articles-page .article-topic-header h2 { transition:color 350ms ease; }
+.articles-page .article-topic-image { position:absolute; inset:0 0 0 auto; width:36%; height:100%; border:0; overflow:visible; z-index:0; transform-origin:right center; transition:transform 600ms cubic-bezier(.2,.65,.3,1); pointer-events:none; }
+.articles-page .article-topic-image img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; transition:opacity 450ms ease; }
+.articles-page .article-topic-section--archive .article-topic-image { width:42%; }
+.articles-page .article-topic-section--archive .article-topic-image img { object-fit:contain; object-position:right center; }
+.articles-page .article-topic-art--active { opacity:0; }
+.articles-page .article-topic-cards { position:relative; z-index:1; }
+.articles-page .article-topic-section:focus-within { border-color:var(--red); }
+.moscow-memory.articles-page .article-topic-section:focus-within .article-topic-header h2 { color:var(--red); }
+.articles-page .article-topic-section:focus-within .article-topic-image { transform:scale(1.12); }
+.articles-page .article-topic-section:focus-within .article-topic-art--active { opacity:1; }
+@media (hover:hover) {
+  .articles-page .article-topic-section:hover { border-color:var(--red); }
+  .moscow-memory.articles-page .article-topic-section:hover .article-topic-header h2 { color:var(--red); }
+  .articles-page .article-topic-section:hover .article-topic-image { transform:scale(1.12); }
+  .articles-page .article-topic-section:hover .article-topic-art--active { opacity:1; }
+}
+@media (max-width:767px) {
+  .articles-page .article-topic-header { padding-right:0; padding-top:125px; }
+  .articles-page .article-topic-image, .articles-page .article-topic-section--archive .article-topic-image { width:55%; height:145px; }
+  .articles-page .article-topic-image img { object-fit:contain; object-position:right top; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .articles-page .article-topic-image, .articles-page .article-topic-image img, .articles-page .article-topic-section, .moscow-memory.articles-page .article-topic-header h2 { transition:none; }
+  .articles-page .article-topic-section:is(:hover,:focus-within) .article-topic-image { transform:none; }
+}
