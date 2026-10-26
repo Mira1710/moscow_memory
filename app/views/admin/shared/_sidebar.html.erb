@@ -2,7 +2,7 @@
   <%= link_to admin_root_path, class: "admin-logo", aria: { label: "Москведение — админка" } do %><%= image_tag "logo.svg", alt: "Москведение" %><% end %>
   <nav aria-label="Разделы админки">
     <% active = controller_name == "places" ? "articles" : controller_name == "launch_subscriptions" ? "subscribers" : action_name %>
-    <% [["Карта", admin_map_path, "map"], ["Маршруты", admin_walking_routes_path, "routes"], ["Статьи", admin_places_path, "articles"], ["Форум", admin_forum_path, "forum"], ["О нас", admin_about_path, "about"], ["Профиль", admin_profile_path, "profile"], ["Подписчики", admin_launch_subscriptions_path, "subscribers"]].each do |label, path, key| %>
+    <% [["Карта", admin_map_path, "map"], ["Маршруты", admin_walking_routes_path, "routes"], ["Статьи", admin_places_path, "articles"], ["Форум", admin_forum_path, "forum"], ["О нас", admin_about_path, "about"], ["Профиль", admin_profile_path, "profile"], ["Подписчики", admin_launch_subscriptions_path, "subscribers"], ["Предложения", admin_profile_submissions_path, "submissions"]].each do |label, path, key| %>
       <%= link_to path, class: ["admin-menu-link", ("active" if active == key)], aria: { current: ("page" if active == key) } do %>
         <span><%= label %></span>
         <% if Rails.root.join("app/assets/images/menu/#{key}.svg").file? %><%= image_tag "menu/#{key}.svg", alt: "", class: "admin-menu-icon" %><% end %>

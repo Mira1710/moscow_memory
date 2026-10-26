@@ -85,7 +85,7 @@ class AdminAccessTest < ActionDispatch::IntegrationTest
       get path
       assert_response :success
       assert_select ".admin-shell", 1
-      assert_select ".admin-sidebar nav a", 7
+      assert_select ".admin-sidebar nav a", 8
       css_select(".admin-sidebar a").each { |link| assert link["href"].start_with?("/admin") }
       assert_select ".admin-topbar form[action='#{admin_logout_path}']", 1
       css_select(".admin-content a").each { |link| assert link["href"].start_with?("/admin"), "Admin link escapes to #{link['href']}" }

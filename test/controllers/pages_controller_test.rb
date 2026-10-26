@@ -2,7 +2,7 @@ require "test_helper"
 
 class PagesControllerTest < ActionDispatch::IntegrationTest
   test "each menu section has its own address and active navigation" do
-    { walking_routes_path => "routes", articles_path => "articles", forum_path => "forum", about_path => "about", profile_path => "profile" }.each do |path, section|
+    { walking_routes_path => "routes", articles_path => "articles", forum_path => "forum", about_path => "about" }.each do |path, section|
       get path
       assert_response :success
       assert_select "h1", 1

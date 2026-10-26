@@ -1,0 +1,8 @@
+<section class="profile-auth"><h1>Пополнить Москведение</h1><%= render "user_accounts/errors", record: @submission %>
+<%= form_with model: @submission do |f| %>
+<%= f.label :kind, "Тип материала" %><%= f.select :kind, ProfileSubmission::KINDS.map { |key, title| [title, key] } %>
+<%= f.label :title, "Название" %><%= f.text_field :title, required: true, maxlength: 150 %>
+<%= f.label :description, "Описание, адрес, источники или ссылка на запись" %><%= f.text_area :description, rows: 6, maxlength: 10000 %>
+<%= f.label :image, "Изображение (JPG, PNG, WebP, GIF до 10 МБ)" %><%= f.file_field :image, accept: "image/jpeg,image/png,image/webp,image/gif" %>
+<p class="profile-help">Для звука укажите ссылку на запись в описании. Предложение сначала попадёт на модерацию.</p>
+<%= f.submit "Отправить материал", class: "profile-primary" %><% end %><p><%= link_to "← Мой профиль", profile_path %></p></section>

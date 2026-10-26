@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_180000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_27_004500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -76,5 +76,53 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_180000) do
     t.index ["seed_key"], name: "index_places_on_seed_key", unique: true
   end
 
+  create_table "profile_submissions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "kind", null: false
+    t.string "title", null: false
+    t.text "description"
+    t.string "image"
+    t.string "status", default: "pending", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_profile_submissions_on_user_id"
+  end
+
+  create_table "saved_places", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "place_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["place_id"], name: "index_saved_places_on_place_id"
+    t.index ["user_id", "place_id"], name: "index_saved_places_on_user_id_and_place_id", unique: true
+    t.index ["user_id"], name: "index_saved_places_on_user_id"
+  end
+
+  create_table "saved_routes", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "route_key", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "route_key"], name: "index_saved_routes_on_user_id_and_route_key", unique: true
+    t.index ["user_id"], name: "index_saved_routes_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "username", null: false
+    t.string "email", null: false
+    t.string "password_digest", null: false
+    t.integer "session_version", default: 0, null: false
+    t.jsonb "notification_preferences", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["username"], name: "index_users_on_username", unique: true
+  end
+
   add_foreign_key "historical_states", "places"
+  add_foreign_key "profile_submissions", "users"
+  add_foreign_key "saved_places", "places"
+  add_foreign_key "saved_places", "users"
+  add_foreign_key "saved_routes", "users"
 end

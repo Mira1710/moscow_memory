@@ -7,7 +7,20 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_admin, :admin_signed_in?, :admin_interface?
 
+  helper_method :current_user
+
   private
+
+  def current_user
+    return @current_user if defined?(@current_user)
+    user = User.find_by(id: session[:user_id]) if session[:user_id]
+    @current_user = user if user && user.session_version == session[:user_session_version]
+  end
+
+  def require_user
+    redirect_to user_login_path, alert: "Войдите в свой профиль.", status: :see_other unless current_user
+  end
+
 
   def current_admin
     return @current_admin if defined?(@current_admin)

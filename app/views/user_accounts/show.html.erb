@@ -1,0 +1,41 @@
+<% content_for :title, "Мой профиль — Москведение" %>
+<section class="profile-summary">
+  <% if Rails.root.join("app/assets/images/profile/avatar.jpg").file? %><%= image_tag "profile/avatar.jpg", alt: "", class: "profile-avatar" %><% else %><div class="profile-avatar profile-avatar-placeholder" aria-hidden="true"><%= current_user.name.first.upcase %></div><% end %>
+  <div><div class="profile-heading"><h1><%= current_user.name %></h1><span>Москвед с <%= current_user.created_at.strftime("%m.%Y") %></span></div>
+    <p><b>Ник:</b> @<%= current_user.username %></p><p><b>Статус:</b> Исследователь</p><p><b>Маршруты:</b> <%= @submissions.count { |item| item.kind == "route" && item.status == "accepted" } %></p>
+  </div>
+  <%= button_to "Выйти", user_logout_path, method: :delete, class: "profile-logout" %>
+</section>
+<section class="profile-public profile-panel"><h2>Публичное</h2>
+  <div class="profile-columns">
+    <section><h3>Маршруты</h3><%= link_to "Предложить маршрут", new_profile_submission_path(kind: "route"), class: "profile-primary" %>
+    <% ProfileSubmission::STATUSES.sort_by { |key, _| ["accepted", "pending", "revision"].index(key) }.each do |status, title| %><h4 class="profile-label"><%= title %></h4><div class="profile-card-row">
+      <% items = @submissions.select { |item| item.kind == "route" && item.status == status } %>
+      <%= render partial: "submission", collection: items %><% if items.empty? %><p class="profile-empty">Пока нет маршрутов.</p><% end %>
+    </div><% end %></section>
+    <section><h3>Архив</h3><%= link_to "Пополнить архив", new_profile_submission_path(kind: "photo"), class: "profile-primary" %>
+      <% { "photo" => "Фото", "map" => "Карты", "sound" => "Звуки" }.each do |kind, title| %><h4 class="profile-label"><%= title %></h4><div class="profile-card-row">
+        <% items = @submissions.select { |item| item.kind == kind } %><%= render partial: "submission", collection: items %>
+        <% if items.empty? %><p class="profile-empty">Материалы пока не добавлены.</p><% end %>
+      </div><% end %>
+    </section>
+  </div>
+</section>
+<section class="profile-personal profile-panel" id="profile-favorites"><h2>Персональное</h2><h3>Избранное</h3><h4 class="profile-label">Статьи</h4>
+<div class="profile-favorites"><% @favorites.each do |place| %><article class="profile-item"><%= link_to place_path(place) do %><h4><%= place.name %></h4><p><%= truncate(strip_tags(place.description.to_s), length: 180) %></p><% end %><%= button_to "Убрать из избранного", saved_place_path(current_user.saved_places.find_by!(place_id: place.id)), method: :delete %></article><% end %></div>
+<% if @favorites.empty? %><p class="profile-empty">Откройте статью и нажмите «В избранное», чтобы сохранить её здесь.</p><% end %>
+<h4 class="profile-label">Маршруты</h4><div class="profile-card-row">
+<% current_user.saved_routes.order(created_at: :desc).each do |saved| %><% card = saved.card %><% next unless card %><article class="profile-item"><% image = "routes/#{card.fetch("image")}" %><% if Rails.root.join("app/assets/images", image).file? %><%= image_tag image, alt: card.fetch("alt"), loading: "lazy" %><% else %><div class="profile-image-placeholder"></div><% end %><h4><%= card.fetch("title") %></h4><%= button_to "Убрать", saved_route_path(saved), method: :delete %></article><% end %>
+</div><% if current_user.saved_routes.empty? %><p class="profile-empty">Сохраняйте понравившиеся маршруты на странице «Маршруты».</p><% end %>
+<section id="profile-settings"><h3>Настройки</h3><%= render "errors", record: @user if @user %>
+<%= form_with model: current_user, url: profile_path, method: :patch, class: "profile-settings-form" do |f| %>
+<%= f.label :name, "Имя" %><%= f.text_field :name, required: true %>
+<%= f.label :username, "Ник" %><%= f.text_field :username, required: true %>
+<%= f.label :email, "Почта" %><%= f.email_field :email, required: true, autocomplete: "email" %>
+<%= f.label :password, "Новый пароль (оставьте пустым, чтобы сохранить прежний)" %><%= f.password_field :password, autocomplete: "new-password", minlength: 12 %>
+<%= f.label :password_confirmation, "Повторите новый пароль" %><%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+<fieldset><legend>Уведомления на почту</legend><p class="profile-help">Сохраняем ваши предпочтения. Рассылка пока не запущена.</p>
+<% { forum: "Ответы на форуме", moderation: "Модерация маршрутов", articles: "Новые статьи", routes: "Новые маршруты", markers: "Новые метки" }.each do |key, title| %><label class="profile-checkbox"><%= hidden_field_tag "user[notification_preferences][#{key}]", "0", id: nil %><%= check_box_tag "user[notification_preferences][#{key}]", "1", current_user.notification_preferences[key.to_s] == "1", id: "notify-#{key}" %><%= title %></label><% end %></fieldset>
+<%= label_tag :current_password, "Текущий пароль для подтверждения изменений" %><%= password_field_tag :current_password, nil, required: true, autocomplete: "current-password" %>
+<%= f.submit "Сохранить настройки", class: "profile-primary" %><% end %></section></section>
+<div class="routes-space" aria-hidden="true"></div>

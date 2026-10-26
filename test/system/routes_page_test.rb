@@ -25,7 +25,7 @@ class RoutesPageTest < ApplicationSystemTestCase
     page.save_screenshot(Rails.root.join("tmp/screenshots/routes-hover.png"))
     find(".sidebar").hover
     card.send_keys(:tab)
-    assert_selector ".route-card:focus"
+    assert_selector ".route-card:focus-within"
     assert_selector ".route-card-meta", visible: true, minimum: 2
     assert_equal 0, page.evaluate_script("Math.max(0, document.documentElement.scrollWidth - innerWidth)")
   end

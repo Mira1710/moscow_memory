@@ -1,0 +1,4 @@
+<article class="profile-item">
+<% if submission.image.present? %><%= image_tag submission.image.url, alt: submission.title, loading: "lazy" %><% else %><div class="profile-image-placeholder" aria-label="Изображение пока не добавлено"><span><%= ProfileSubmission::KINDS.fetch(submission.kind) %></span></div><% end %>
+<h4><%= submission.title %></h4><% if submission.description.present? %><p><%= submission.description %></p><% end %>
+</article>

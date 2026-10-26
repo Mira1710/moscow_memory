@@ -1,0 +1,11 @@
+<% content_for :title, "Регистрация — Москведение" %>
+<section class="profile-auth"><h1>Стать москведом</h1><p>Создайте профиль, чтобы сохранять статьи и пополнять архив города.</p>
+<%= render "errors", record: @user %>
+<%= form_with model: @user, url: user_registration_path do |f| %>
+  <%= f.label :name, "Имя" %><%= f.text_field :name, required: true, maxlength: 80, autocomplete: "name" %>
+  <%= f.label :username, "Ник (латинские буквы, цифры и _)" %><%= f.text_field :username, required: true, minlength: 3, maxlength: 30, autocomplete: "username" %>
+  <%= f.label :email, "Почта" %><%= f.email_field :email, required: true, autocomplete: "email" %>
+  <%= f.label :password, "Пароль — от 12 символов" %><%= f.password_field :password, required: true, minlength: 12, maxlength: 72, autocomplete: "new-password" %>
+  <%= f.label :password_confirmation, "Повторите пароль" %><%= f.password_field :password_confirmation, required: true, autocomplete: "new-password" %>
+  <%= f.submit "Зарегистрироваться", class: "profile-primary" %>
+<% end %><p>Уже есть профиль? <%= link_to "Войти", user_login_path %></p></section>

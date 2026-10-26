@@ -1,0 +1,17 @@
+<% content_for :content do %>
+<div class="moscow-memory section-page routes-page profile-page" data-controller="routes-menu" data-action="keydown.esc@window->routes-menu#close">
+  <%= render "shared/sidebar", active_section: "profile" %>
+  <main>
+    <header class="routes-mobile-header">
+      <%= link_to root_path, class: "routes-mobile-logo", aria: { label: "Москведение — главная" } do %><%= image_tag "mobile-logo.svg", alt: "Москведение" %><% end %>
+      <span>Профиль</span>
+      <button type="button" aria-label="Открыть меню" aria-controls="profile-navigation" aria-expanded="false" data-routes-menu-target="button" data-action="routes-menu#toggle"><i aria-hidden="true">☰</i></button>
+    </header>
+    <% if notice %><p class="profile-flash" role="status"><%= notice %></p><% end %>
+    <% if alert %><p class="profile-flash profile-error" role="alert"><%= alert %></p><% end %>
+    <%= yield %>
+    <footer class="site-footer routes-footer"><div>Цифровой архив Москвы.<br>© Москведение, <%= Date.current.year %></div><div><%= link_to "Источники", places_path %></div><div><%= link_to "Карта", root_path %></div><div><%= link_to "О нас", about_path %></div></footer>
+  </main>
+</div>
+<% end %>
+<%= render template: "layouts/application" %>

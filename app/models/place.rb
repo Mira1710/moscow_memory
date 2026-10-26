@@ -23,6 +23,7 @@ class Place < ApplicationRecord
   article_gallery :map_images
   article_gallery :object_images
 
+  has_many :saved_places, dependent: :destroy
   has_many :historical_states, dependent: :destroy, inverse_of: :place
   accepts_nested_attributes_for :historical_states, allow_destroy: true, reject_if: :blank_history?
 
