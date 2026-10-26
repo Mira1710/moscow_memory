@@ -93,7 +93,7 @@
 .moscow-memory.map-page .category-filter { gap: 8px; min-height: 32px; padding: 4px 0; font-size: clamp(10px, .82vw, 14px); line-height: 1.2; }
 .moscow-memory.map-page .category-icon { width: 25px; height: 25px; flex-basis: 25px; }
 .moscow-memory.map-page .category-icon-empty { width: 22px; height: 22px; flex-basis: 22px; margin: 1px; }
-.moscow-memory.map-page .interval { border-radius: 0 14px 0 0; overflow: hidden; }
+.moscow-memory.map-page .interval { border-radius: 14px 0 0 0; overflow: hidden; }
 @media (max-width: 767px) {
   .moscow-memory.map-page .map-places { max-height: calc(100% - 115px); }
   .moscow-memory.map-page .category-filter { min-height: 27px; font-size: 10px; }
