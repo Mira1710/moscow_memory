@@ -15,8 +15,6 @@
 .moscow-memory.articles-page .article-topic-card:is(:hover, :focus-visible, .selected) h3 { color: var(--red); }
 .articles-page .article-topic-card:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
 .articles-page .catalogue-results { margin-top: 16px; padding: 14px 16px; border: 1px solid #ddd; background: var(--paper); scroll-margin-top: 20px; }
-.articles-page .catalogue-results > summary { cursor: pointer; font-size: 13px; padding: 6px 0; }
-.articles-page .catalogue-results > summary span { color: #888; }
 .articles-page .article-index { margin-top: 20px; }
 .moscow-memory.articles-page .article-index h3 { font-size: 20px; margin: 0 0 8px; }
 .articles-page .catalogue-reset { display: inline-block; margin-top: 12px; font-size: 12px; }
@@ -39,3 +37,5 @@
 @media (prefers-reduced-motion: reduce) {
   .articles-page .article-topic-card, .moscow-memory.articles-page .article-topic-card h3 { transition: none; }
 }
+
+.moscow-memory.articles-page .catalogue-results > h2 { font: 400 40px/1 "Aempirial", serif; margin: 6px 0 12px; }

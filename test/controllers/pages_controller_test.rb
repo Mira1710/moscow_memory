@@ -13,7 +13,8 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "articles link to actual places" do
-    get articles_path
+    places(:one).update!(article_topic: "maps")
+    get articles_path(topic: "maps")
     assert_select ".article-index a[href='#{place_path(places(:one))}']", 1
   end
   test "article themes show only matching saved materials" do
@@ -23,13 +24,13 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select ".article-topic-section", 3
     assert_select ".article-topic-card", 9
-    assert_select "#article-results[open]", 1
+    assert_select "#article-results", 1
     assert_select ".article-index a[href='#{place_path(place)}']", 1
     assert_select ".article-index a[href='#{place_path(places(:two))}']", 0
     get articles_path(topic: "sounds")
     assert_select ".article-index article", 0
     assert_includes response.body, "Материалы этой темы пока не добавлены"
     get articles_path(topic: "not-a-topic")
-    assert_select ".article-index article", Place.count
+    assert_select "#article-results", 0
   end
 end

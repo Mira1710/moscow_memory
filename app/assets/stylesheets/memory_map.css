@@ -78,7 +78,6 @@
 .moscow-memory .interval-buttons button { background: transparent; border: 1px solid #999; border-radius: 5px; padding: .45rem; white-space: nowrap; font-size: .9em; }
 .moscow-memory [aria-pressed="true"] { color: var(--red); }
 .moscow-memory .interval-buttons button[aria-pressed="true"] { border-color: var(--red); }
-.moscow-memory .all-years { display: block; border: 0; background: none; padding: 0 .6rem .5rem; font-size: .8em; text-decoration: underline; }
 .moscow-memory .timeline { min-width: 0; padding-top: .6rem; }
 .moscow-memory .year-track { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 3px 8px 10px; }
 .moscow-memory .year-track::before { content: ""; position: absolute; top: calc(50% - 3px); left: 0; right: 0; border-top: 1px solid var(--red); }
@@ -191,3 +190,19 @@
 @media(max-height:620px) and (min-width:601px) { .moscow-memory .article { top: 12px; bottom: 72px; } }
 
 .moscow-memory .timeline { height: 108px; min-height: 108px; }
+
+/* More room for the map: compact introduction and signup cards. */
+@media (min-width: 768px) {
+  .moscow-memory.map-page .intro-stack { width: 26%; gap: 8px; font-size: clamp(11px, .82vw, 14px); }
+  .moscow-memory.map-page .intro-stack .card { padding: 14px; }
+  .moscow-memory.map-page .intro-stack :is(h1, .launch-card h2) { font-size: 1.55em; margin-bottom: 8px; }
+  .moscow-memory.map-page .intro-stack p { line-height: 1.4; }
+  .moscow-memory.map-page .intro-stack .red { margin-top: 8px; }
+  .moscow-memory.map-page .launch-card input[type=email] { margin: 8px 0; padding: 9px 11px; }
+  .moscow-memory.map-page .launch-consent { margin: 8px 0 12px; font-size: .78em; }
+  .moscow-memory.map-page .launch-submit { min-height: 38px; padding: 8px 10px; }
+}
+@media (min-width: 768px) and (max-width: 1000px) {
+  .moscow-memory.map-page .intro-stack { width: 34%; }
+  .moscow-memory.map-page .intro-stack .card { padding: 10px; }
+}

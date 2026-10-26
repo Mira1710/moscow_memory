@@ -23,7 +23,7 @@ class ArticlesPageTest < ApplicationSystemTestCase
     end
     page.save_screenshot(Rails.root.join("tmp/screenshots/articles-hover.png"))
     card.click
-    assert_selector "#article-results[open]"
+    assert_selector "#article-results"
     within ".article-index" do
       click_link "Статья из базы"
     end

@@ -27,8 +27,9 @@
     </section>
   <% end %>
 </div>
-<details id="article-results" class="catalogue-results" <%= "open" if @selected_topic %>>
-  <summary><%= @selected_topic ? "Материалы: #{Place::ARTICLE_TOPICS.fetch(@selected_topic)}" : "Все статьи из базы" %> <span>(<%= @places.size %>)</span></summary>
+<% if @selected_topic %>
+<section id="article-results" class="catalogue-results" aria-labelledby="selected-topic-title">
+  <h2 id="selected-topic-title"><%= Place::ARTICLE_TOPICS.fetch(@selected_topic) %></h2>
   <% if @selected_topic %><%= link_to "Все темы", articles_path(anchor: "article-results"), class: "catalogue-reset" %><% end %>
   <div class="article-index">
     <% @places.each do |place| %><article>
@@ -37,7 +38,8 @@
     </article><% end %>
     <% if @places.empty? %><p>Материалы этой темы пока не добавлены.</p><% end %>
   </div>
-</details>
+</section>
+<% end %>
 <div class="routes-space" aria-hidden="true"></div>
 <footer class="site-footer routes-footer">
   <div>Цифровой архив Москвы.<br>© Москведение, <%= Date.current.year %></div>

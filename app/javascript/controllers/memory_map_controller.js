@@ -21,7 +21,7 @@ function loadMaps(key) {
 }
 
 export default class extends Controller {
-  static targets = ["map", "status", "article", "body", "scroll", "close", "place", "year", "yearLabel", "allYears", "years", "allYearsButton", "sources", "placePeriods"]
+  static targets = ["map", "status", "article", "body", "scroll", "close", "place", "year", "yearLabel", "allYears", "years", "sources", "placePeriods"]
   static values = { key: String }
 
   connect() {
@@ -132,7 +132,6 @@ export default class extends Controller {
       const active = !this.allYearsTarget.checked && Number(button.dataset.year) === Number(this.yearTarget.value)
       button.setAttribute("aria-pressed", String(active))
     })
-    this.allYearsButtonTarget.setAttribute("aria-pressed", String(this.allYearsTarget.checked))
     this.element.querySelectorAll("[data-step]").forEach(button => button.setAttribute("aria-pressed", String(Number(button.dataset.step) === this.step)))
   }
 
@@ -145,11 +144,6 @@ export default class extends Controller {
     this.historyMode = false
     this.step = Number(event.currentTarget.dataset.step)
     this.renderYears()
-  }
-
-  showAllYears() {
-    this.allYearsTarget.checked = true
-    this.filter()
   }
 
   toggleMenu() {
@@ -184,7 +178,7 @@ export default class extends Controller {
   }
 
   filter() {
-    this.yearLabelTarget.textContent = this.allYearsTarget.checked ? "Все эпохи" : `Год: ${this.yearTarget.value}`
+    this.yearLabelTarget.textContent = this.allYearsTarget.checked ? "Выберите год на временной шкале" : `Год: ${this.yearTarget.value}`
     this.updateYearButtons()
     this.placeTargets.forEach(template => {
       const id = template.dataset.placeId
