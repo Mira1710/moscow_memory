@@ -31,7 +31,7 @@
 .profile-empty { color:#737373; min-height:85px; margin:8px 0; }
 .profile-favorites { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
 .profile-primary { display:inline-block; background:#b71116; color:white!important; border:0; border-radius:5px; padding:9px 22px; font:inherit; font-size:14px; text-decoration:none; cursor:pointer; }
-.profile-page button:not(.profile-primary):not([data-routes-menu-target]),.profile-item button { padding:7px 12px; border:1px solid #444; border-radius:4px; background:var(--paper); cursor:pointer; }
+.profile-page .profile-logout,.profile-page .profile-item button { padding:7px 12px; border:1px solid #444; border-radius:4px; background:var(--paper); cursor:pointer; }
 .profile-auth { margin:35px auto 80px; padding:28px; max-width:560px; background:var(--paper); border:1px solid #ddd; }
 .profile-auth h1 { margin-bottom:18px; }
 .profile-page form label { display:block; margin:14px 0 5px; font-size:14px; }
@@ -60,3 +60,7 @@
 .route-card > .button_to { position:absolute; top:8px; right:8px; z-index:2; }
 .route-card { position:relative; }
 .route-save { background:#f7f7f7ed; border:1px solid #bbb; border-radius:4px; padding:5px 8px; font:inherit; font-size:11px; cursor:pointer; }
+
+.moscow-memory.profile-page main { min-height:100dvh; }
+.profile-page .routes-footer { margin-top:auto; }
+.profile-page .profile-auth { flex-shrink:0; }

@@ -9,5 +9,5 @@ class User < ApplicationRecord
   validates :name, presence: true, length: { maximum: 80 }
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :username, presence: true, uniqueness: true, format: { with: /\A[a-z0-9_]{3,30}\z/, message: "— от 3 до 30 латинских букв, цифр или _" }
-  validates :password, length: { minimum: 12, maximum: 72 }, if: -> { new_record? || password.present? }
+  validates :password, length: { minimum: 8, maximum: 72, too_short: "должен содержать минимум 8 символов", too_long: "не должен превышать 72 символа" }, if: -> { new_record? || password.present? }
 end

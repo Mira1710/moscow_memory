@@ -1,7 +1,7 @@
 <% content_for :title, "Вход — Москведение" %>
 <section class="profile-auth"><h1>Войти в профиль</h1>
 <%= form_with url: user_login_path do |f| %>
-  <%= f.label :email, "Почта" %><%= f.email_field :email, required: true, autocomplete: "username" %>
+  <%= f.label :email, "Почта" %><%= f.email_field :email, value: params[:email], required: true, autocomplete: "username" %>
   <%= f.label :password, "Пароль" %><%= f.password_field :password, required: true, autocomplete: "current-password" %>
   <%= f.submit "Войти", class: "profile-primary" %>
 <% end %><p>Ещё нет профиля? <%= link_to "Зарегистрироваться", user_registration_path %></p></section>

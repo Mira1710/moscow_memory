@@ -1,0 +1,28 @@
+en:
+  activerecord:
+    attributes:
+      user:
+        name: Имя
+        username: Ник
+        email: Почта
+        password: Пароль
+        password_confirmation: Подтверждение пароля
+    errors:
+      models:
+        user:
+          attributes:
+            name:
+              blank: не может быть пустым
+              too_long: слишком длинное
+            username:
+              blank: не может быть пустым
+              taken: уже занят
+            email:
+              blank: не может быть пустой
+              invalid: указана некорректно
+              taken: уже используется
+            password:
+              blank: не может быть пустым
+            password_confirmation:
+              blank: не может быть пустым
+              confirmation: не совпадает с паролем

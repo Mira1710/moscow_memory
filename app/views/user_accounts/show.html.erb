@@ -32,7 +32,7 @@
 <%= f.label :name, "Имя" %><%= f.text_field :name, required: true %>
 <%= f.label :username, "Ник" %><%= f.text_field :username, required: true %>
 <%= f.label :email, "Почта" %><%= f.email_field :email, required: true, autocomplete: "email" %>
-<%= f.label :password, "Новый пароль (оставьте пустым, чтобы сохранить прежний)" %><%= f.password_field :password, autocomplete: "new-password", minlength: 12 %>
+<%= f.label :password, "Новый пароль (оставьте пустым, чтобы сохранить прежний)" %><%= f.password_field :password, autocomplete: "new-password", minlength: 8 %>
 <%= f.label :password_confirmation, "Повторите новый пароль" %><%= f.password_field :password_confirmation, autocomplete: "new-password" %>
 <fieldset><legend>Уведомления на почту</legend><p class="profile-help">Сохраняем ваши предпочтения. Рассылка пока не запущена.</p>
 <% { forum: "Ответы на форуме", moderation: "Модерация маршрутов", articles: "Новые статьи", routes: "Новые маршруты", markers: "Новые метки" }.each do |key, title| %><label class="profile-checkbox"><%= hidden_field_tag "user[notification_preferences][#{key}]", "0", id: nil %><%= check_box_tag "user[notification_preferences][#{key}]", "1", current_user.notification_preferences[key.to_s] == "1", id: "notify-#{key}" %><%= title %></label><% end %></fieldset>

@@ -7,8 +7,8 @@ class UserProfileTest < ApplicationSystemTestCase
     fill_in "Имя", with: "Женя"
     fill_in "Ник (латинские буквы, цифры и _)", with: "mosknow"
     fill_in "Почта", with: "profile@example.test"
-    fill_in "Пароль — от 12 символов", with: "LongPassword123!"
-    fill_in "Повторите пароль", with: "LongPassword123!"
+    fill_in "Пароль — от 8 символов", with: "12345678"
+    fill_in "Повторите пароль", with: "12345678"
     click_button "Зарегистрироваться"
     assert_current_path profile_path
     assert_selector "h1", text: "ЖЕНЯ"
@@ -27,5 +27,10 @@ class UserProfileTest < ApplicationSystemTestCase
     page.save_screenshot(Rails.root.join("tmp/screenshots/profile-mobile.png"))
     click_button "Выйти"
     assert_current_path user_login_path
+    fill_in "Почта", with: "profile@example.test"
+    fill_in "Пароль", with: "12345678"
+    click_button "Войти"
+    assert_current_path profile_path
+    assert_selector "h1", text: "ЖЕНЯ"
   end
 end

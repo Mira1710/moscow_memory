@@ -10,7 +10,12 @@
     <% if notice %><p class="profile-flash" role="status"><%= notice %></p><% end %>
     <% if alert %><p class="profile-flash profile-error" role="alert"><%= alert %></p><% end %>
     <%= yield %>
-    <footer class="site-footer routes-footer"><div>Цифровой архив Москвы.<br>© Москведение, <%= Date.current.year %></div><div><%= link_to "Источники", places_path %></div><div><%= link_to "Карта", root_path %></div><div><%= link_to "О нас", about_path %></div></footer>
+<footer class="site-footer routes-footer">
+  <div>Цифровой архив Москвы.<br>© Москведение, <%= Date.current.year %></div>
+  <div><%= link_to "Источники", places_path %></div>
+  <div class="footer-links"><button type="button" disabled title="Добавьте ссылку на вашу политику">Политика конфиденциальности</button><button type="button" disabled title="Добавьте контакт проекта">Обратная связь</button></div>
+  <div class="footer-links"><button type="button" disabled title="Добавьте адрес канала">Telegram ↗</button><button type="button" disabled title="Добавьте адрес сообщества">VK ↗</button></div>
+</footer>
   </main>
 </div>
 <% end %>
