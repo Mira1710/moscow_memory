@@ -30,18 +30,20 @@ export default class extends Controller {
     this.introTarget.style.setProperty("--title-drop", `${intro * 62}px`)
     this.introTarget.style.setProperty("--bridge-width", `${26 + intro * 74}%`)
     const history = reduced ? 1 : this.progress(this.historyTarget)
-    this.historyTarget.querySelectorAll(".about-image").forEach((image, index) => {
-      const phase = clamp((history - index * .065) / .65)
-      image.style.setProperty("--image-x", `${(phase - .5) * 64}px`)
-      image.style.setProperty("--image-y", `${(phase - .5) * 80 + index * 12}px`)
-      image.style.setProperty("--image-opacity", reduced ? 1 : clamp(phase * 3))
-    })
+    const group = this.historyTarget.querySelector(".about-evidence-grid")
+    group.style.setProperty("--group-x", `${history * 100}px`)
+    group.style.setProperty("--group-y", `${history * 100}px`)
+    group.style.setProperty("--group-opacity", reduced ? 1 : clamp(history * 6))
     const maps = reduced ? 0 : this.progress(this.mapsTarget)
-    const reveal = clamp((maps - .3) / .4)
-    this.mapsTarget.style.setProperty("--map-reveal", reveal)
-    this.mapsTarget.style.setProperty("--map-rise", `${(1 - reveal) * 90}px`)
+    const second = clamp((maps - .2) / .25)
+    const third = clamp((maps - .6) / .25)
+    const active = third > .6 ? 2 : second > .6 ? 1 : 0
     this.mapFrameTargets.forEach((section, index) => {
-      const hidden = !reduced && (index === 0 ? reveal > .6 : reveal <= .6)
+      const reveal = index === 0 ? 1 : index === 1 ? second : third
+      const opacity = index === 0 ? 1 - second : index === 1 ? second * (1 - third) : third
+      section.style.setProperty("--frame-opacity", reduced ? 1 : opacity)
+      section.style.setProperty("--frame-rise", `${(1 - reveal) * 90}px`)
+      const hidden = !reduced && index !== active
       section.inert = hidden
       section.setAttribute("aria-hidden", String(hidden))
     })

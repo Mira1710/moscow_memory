@@ -7,6 +7,10 @@ class LaunchSignupTest < ApplicationSystemTestCase
     [ root_path, about_path ].each_with_index do |path, index|
       page.driver.browser.execute_cdp("Emulation.setDeviceMetricsOverride", width: index.zero? ? 1440 : 390, height: 1000, deviceScaleFactor: 1, mobile: !index.zero?)
       visit path
+      if path == about_path
+        page.execute_script("const main = document.querySelector('.about-page main'); const story = main.querySelector('.about-map-story'); main.scrollTop = story.offsetTop + story.offsetHeight - main.clientHeight;")
+        assert_selector ".about-more[aria-hidden=false]"
+      end
       within ".launch-signup" do
         assert_button "Узнать о запуске", disabled: true
         fill_in "Электронная почта", with: "visitor#{index}@example.test"

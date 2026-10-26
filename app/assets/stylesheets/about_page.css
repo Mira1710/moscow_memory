@@ -22,23 +22,29 @@
 .moscow-memory.section-page.about-page .about-history { height: 165%; }
 .moscow-memory.about-page .about-history-stage { position: sticky; top: 0; min-height: 100svh; padding: 45px 48px 100px; overflow: hidden; }
 .moscow-memory.about-page .about-narrow-copy { max-width: 420px; margin: 0 0 30px; }
-.moscow-memory.about-page .about-evidence-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin-top: 55px; padding: 30px 0 90px; }
+.moscow-memory.about-page .about-evidence-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin-top: 55px; padding: 30px 0 100px; transform: translate(var(--group-x, 0px), var(--group-y, 0px)); opacity: var(--group-opacity, 0); will-change: transform, opacity; align-items: start; }
 .moscow-memory.about-page .about-image { margin: 0; min-width: 0; }
-.moscow-memory.about-page .about-evidence-grid .about-image { transform: translate(var(--image-x, -32px), var(--image-y, -40px)); opacity: var(--image-opacity, 0); will-change: transform, opacity; }
+.moscow-memory.about-page .about-evidence-grid .about-image { transform: none; opacity: 1; }
 .moscow-memory.about-page .about-image img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: var(--image-fit, cover); object-position: var(--image-position, 50% 50%); }
 .moscow-memory.about-page .about-image-placeholder { display: grid; place-content: center; gap: 14px; aspect-ratio: 1; padding: 14px; border: 1px solid #ccc; background: var(--paper); color: #777; text-align: center; }
 .moscow-memory.about-page .about-image-placeholder small { font-size: 10px; overflow-wrap: anywhere; }
 .moscow-memory.about-page figcaption { padding-top: 14px; text-align: center; font-size: clamp(10px, .9vw, 15px); line-height: 1.45; }
-.moscow-memory.about-page .about-map-story { position: relative; height: 220%; }
+.moscow-memory.about-page .about-map-story { position: relative; height: 330%; }
 .moscow-memory.about-page .about-map-stage { position: sticky; top: 0; height: 100svh; overflow: hidden; }
 .moscow-memory.section-page.about-page .about-map-stage .about-scene { position: absolute; inset: 0; padding: 45px 32px; }
-.moscow-memory.about-page .about-how-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; height: 100%; }
+.moscow-memory.about-page .about-how-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: center; height: 100%; }
 .moscow-memory.about-page .about-how-copy { background: var(--paper); padding: 16px; border: 1px solid #ddd; }
 .moscow-memory.about-page .about-how-copy .about-display { font-size: clamp(34px, 3.5vw, 66px); }
 .moscow-memory.about-page .about-how-copy p { margin-top: 30px; }
 .moscow-memory.about-page .about-map-image :is(img,.about-image-placeholder) { aspect-ratio: auto; max-height: 74svh; object-fit: contain; }
-.moscow-memory.about-page .about-map-stage .about-how { z-index: 1; opacity: calc(1 - var(--map-reveal, 0)); }
-.moscow-memory.about-page .about-map-stage .about-timeline { z-index: 2; opacity: var(--map-reveal, 0); transform: translateY(var(--map-rise, 90px)); }
+.moscow-memory.section-page.about-page .about-map-stage .about-scene { opacity: var(--frame-opacity, 0); transform: translateY(var(--frame-rise, 0px)); }
+.moscow-memory.about-page .about-map-stage .about-how { z-index: 1; }
+.moscow-memory.about-page .about-map-stage .about-timeline { z-index: 2; }
+.moscow-memory.about-page .about-map-stage .about-more { z-index: 3; }
+.moscow-memory.about-page .about-map-stage .about-more-grid { height: 100%; }
+.moscow-memory.about-page .about-map-stage .about-more-copy { padding: 16px; background: var(--paper); border: 1px solid #ddd; }
+.moscow-memory.about-page .about-map-stage .about-launch-visual { align-self: center; }
+.moscow-memory.about-page .about-map-stage .about-launch-map :is(img,.about-image-placeholder) { max-height: 74svh; object-fit: contain; }
 .moscow-memory.about-page .about-map-link { display: inline-block; margin-top: 16px; text-underline-offset: 4px; }
 .moscow-memory.about-page .about-mini-timeline { display: flex; justify-content: space-between; gap: 4px; margin-top: 12px; }
 .moscow-memory.about-page .about-mini-timeline span { padding: 4px 8px; border: 1px solid var(--red); border-radius: 8px; background: var(--paper); }
@@ -59,7 +65,7 @@
   .moscow-memory.about-page .about-map-image :is(img,.about-image-placeholder) { max-height: 42svh; }
   .moscow-memory.about-page .about-how-copy p { margin-top: 16px; }
   .moscow-memory.about-page .about-how-copy :is(.about-display,.about-subtitle) { font-size: 30px; margin-bottom: 12px; }
-  .moscow-memory.about-page .about-map-story { height: 260%; }
+  .moscow-memory.about-page .about-map-story { height: 360%; }
 }
 @media (max-width: 500px) {
   .moscow-memory.section-page.about-page::after { inset: 10px 8px 10px calc(var(--side) + 12px); }
@@ -81,7 +87,7 @@
   .moscow-memory.about-page :is(.about-intro-stage,.about-history-stage,.about-map-stage) { position: relative; height: auto; min-height: 600px; }
   .moscow-memory.about-page .about-map-stage { overflow: visible; }
   .moscow-memory.section-page.about-page .about-map-stage .about-scene { position: relative; inset: auto; opacity: 1; transform: none; }
-  .moscow-memory.about-page .about-evidence-grid .about-image { transform: none; opacity: 1; will-change: auto; }
+  .moscow-memory.about-page .about-evidence-grid { transform: none; opacity: 1; will-change: auto; }
   .moscow-memory.about-page .about-intro-heading { transform: none; }
   .moscow-memory.about-page .about-bridge-years, .moscow-memory.about-page .about-bridge-periods { opacity: 1; transform: none; }
 }
