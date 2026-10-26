@@ -56,7 +56,7 @@ class MapNavigationTest < ApplicationSystemTestCase
     page.current_window.resize_to(390, 844)
     visit about_path
     assert_selector "#about-title"
-    assert_selector ".about-scene", count: 5
+    assert_selector ".about-scene", count: 5, visible: :all
     assert_equal 0, page.evaluate_script("Math.max(0, document.documentElement.scrollWidth - window.innerWidth)")
     visit root_path
     assert_selector ".map"

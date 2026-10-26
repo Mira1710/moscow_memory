@@ -1,17 +1,21 @@
 <% content_for :title, "О нас — Москведение" %>
-<section class="about-scene about-intro" data-about-story-target="scene" aria-labelledby="about-title">
-  <div class="about-depth">
-    <p class="about-kicker">О проекте</p>
-    <h1 id="about-title">Вдоль и поперёк</h1>
+<section class="about-scene about-intro" data-about-story-target="intro" aria-labelledby="about-title">
+  <div class="about-intro-stage">
+    <div class="about-intro-heading"><h1 id="about-title">Вдоль и поперёк</h1></div>
     <p class="about-intro-copy">Вы знаете свой район.<br><em>А что было здесь сто лет назад?</em></p>
     <div class="about-question" aria-hidden="true">?</div>
-    <div class="about-time-bridge" aria-label="От прошлого к настоящему"><span>тогда</span><i></i><span>сейчас</span></div>
+    <div class="about-time-bridge" aria-label="От прошлого к настоящему">
+      <span class="about-bridge-end">тогда</span>
+      <div class="about-bridge-years"><% (1950..2020).step(10).each do |year| %><span><%= year %></span><% end %></div>
+      <span class="about-bridge-end">сейчас</span>
+    </div>
+    <div class="about-bridge-periods"><span>ВОВ и восстановление</span><span>Расширение периферии</span><span>Жилые дома</span><span>Коммерциализация</span><span>Современный урбанизм</span></div>
+    <a class="about-next" href="#scattered-history">Листайте, чтобы узнать ↓</a>
   </div>
-  <a class="about-next" href="#scattered-history">Листайте, чтобы узнать ↓</a>
 </section>
 
-<section id="scattered-history" class="about-scene about-history" data-about-story-target="scene" aria-labelledby="history-title">
-  <div class="about-depth">
+<section id="scattered-history" class="about-scene about-history" data-about-story-target="history" aria-labelledby="history-title">
+  <div class="about-history-stage">
     <h2 id="history-title" class="about-display">История разбросана</h2>
     <p class="about-narrow-copy">Существующие источники и сервисы сосредоточены на отдельных видах информации, не синхронизированной между категориями и временем.</p>
     <div class="about-evidence-grid">
@@ -28,8 +32,9 @@
   </div>
 </section>
 
-<section class="about-scene about-how" data-about-story-target="scene" aria-labelledby="how-title">
-  <div class="about-depth about-how-grid">
+<div class="about-map-story" data-about-story-target="maps"><div class="about-map-stage">
+<section class="about-scene about-how" data-about-story-target="mapFrame" aria-labelledby="how-title">
+  <div class="about-how-grid">
     <div class="about-how-copy">
       <h2 id="how-title" class="about-display">Мы собираем факты воедино</h2>
       <h3 class="about-subtitle">Как работать с картой?</h3>
@@ -39,8 +44,8 @@
   </div>
 </section>
 
-<section class="about-scene about-timeline" data-about-story-target="scene" aria-labelledby="timeline-title">
-  <div class="about-depth about-how-grid">
+<section class="about-scene about-timeline" data-about-story-target="mapFrame" aria-labelledby="timeline-title">
+  <div class="about-how-grid">
     <div class="about-how-copy about-timeline-copy">
       <h2 id="timeline-title" class="about-subtitle">Таймлайн и статьи</h2>
       <p>На интерактивной карте расположены знакомые вам места, таймлайн показывает изменения города во времени. В статьях описана их история в исторические и архитектурные эпохи, а архив содержит связанные фото, предметы и звуки.</p>
@@ -52,6 +57,8 @@
     </div>
   </div>
 </section>
+
+</div></div>
 
 <section class="about-scene about-more" data-about-story-target="scene" aria-labelledby="more-title">
   <div class="about-depth about-more-grid">
