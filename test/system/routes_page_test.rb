@@ -11,7 +11,11 @@ class RoutesPageTest < ApplicationSystemTestCase
     card = section.first(".route-card")
     initial_width = card.native.rect.width
     page.save_screenshot(Rails.root.join("tmp/screenshots/routes-desktop.png"))
-    section.hover
+    if page.evaluate_script('matchMedia("(hover: hover)").matches')
+      section.hover
+    else
+      card.send_keys(:tab)
+    end
     assert_selector ".route-card-meta", visible: true, minimum: 2
     assert_operator card.native.rect.width, :>, initial_width
     section.synchronize do
