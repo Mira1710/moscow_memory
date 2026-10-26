@@ -1,5 +1,46 @@
 <% content_for :title, "Маршруты — Москведение" %>
-<h1>Маршруты</h1>
-<p>Раздел для прогулок по архитектурным объектам Москвы.</p>
-<p>Подборки маршрутов пока не добавлены. Сейчас можно выбрать места на карте или открыть архив.</p>
-<%= link_to "Исследовать карту", root_path %> · <%= link_to "Открыть архив", places_path %>
+<header class="routes-mobile-header">
+  <%= link_to root_path, aria: { label: "Москведение — главная" }, class: "routes-mobile-logo" do %><%= image_tag "mobile-logo.svg", alt: "Москведение" %><% end %>
+  <span>Маршруты</span>
+  <button type="button" aria-label="Открыть меню" aria-controls="routes-navigation" aria-expanded="false" data-routes-menu-target="button" data-action="routes-menu#toggle"><i aria-hidden="true">☰</i></button>
+</header>
+<h1 class="visually-hidden">Маршруты</h1>
+<div class="route-sections">
+  <% @route_sections.each do |section| %>
+    <section class="route-section" aria-labelledby="route-title-<%= section.fetch("id") %>">
+      <div class="route-section-copy">
+        <h2 id="route-title-<%= section.fetch("id") %>"><%= section.fetch("title") %></h2>
+        <p><%= section.fetch("intro") %></p>
+        <p><%= section.fetch("description") %></p>
+      </div>
+      <div class="route-cards">
+        <% section.fetch("cards").each do |card| %>
+          <% image = "routes/#{card.fetch("image")}" %>
+          <figure class="route-card" tabindex="0" aria-label="<%= card.fetch("title") %>: информация о маршруте">
+            <div class="route-card-media">
+              <% if Rails.root.join("app/assets/images", image).file? %>
+                <%= image_tag image, alt: card.fetch("alt"), loading: "lazy" %>
+              <% else %>
+                <div class="route-image-placeholder" aria-label="Место для изображения: <%= card.fetch("alt") %>"><span>Москведение</span><span>Маршруты по городу</span></div>
+              <% end %>
+            </div>
+            <figcaption>
+              <h3><%= card.fetch("title") %></h3>
+              <dl class="route-card-meta">
+                <div><dt>Время</dt><dd><%= card["duration"].presence || "уточняется" %></dd></div>
+                <div><dt>Длина</dt><dd><%= card["distance"].presence || "уточняется" %></dd></div>
+              </dl>
+            </figcaption>
+          </figure>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+</div>
+<div class="routes-space" aria-hidden="true"></div>
+<footer class="site-footer routes-footer">
+  <div>Цифровой архив Москвы.<br>© Москведение, <%= Date.current.year %></div>
+  <div><%= link_to "Источники", articles_path %></div>
+  <div class="footer-links"><button type="button" disabled title="Добавьте ссылку на вашу политику">Политика конфиденциальности</button><button type="button" disabled title="Добавьте контакт проекта">Обратная связь</button></div>
+  <div class="footer-links"><button type="button" disabled title="Добавьте адрес канала">Telegram ↗</button><button type="button" disabled title="Добавьте адрес сообщества">VK ↗</button></div>
+</footer>

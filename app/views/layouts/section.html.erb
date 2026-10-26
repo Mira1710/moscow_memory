@@ -1,8 +1,8 @@
 <% content_for :content do %>
-  <div class="moscow-memory section-page <%= "about-page" if action_name == "about" %>">
+  <div data-controller="<%= "routes-menu" if action_name == "routes" %>" data-action="<%= "keydown.esc@window->routes-menu#close" if action_name == "routes" %>" class="moscow-memory section-page <%= "about-page" if action_name == "about" %> <%= "routes-page" if action_name == "routes" %>">
     <%= render "shared/sidebar", active_section: action_name %>
     <main <%= 'data-controller="about-story"'.html_safe if action_name == "about" %>>
-      <% if action_name == "about" %>
+      <% if %w[about routes].include?(action_name) %>
         <%= yield %>
       <% else %>
       <section class="section-content">
