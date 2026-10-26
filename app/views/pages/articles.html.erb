@@ -1,13 +1,47 @@
 <% content_for :title, "Статьи — Москведение" %>
-<h1>Статьи</h1>
-<p>Материалы об объектах из архива проекта.</p>
-<div class="article-index">
-  <% @places.each do |place| %>
-    <article>
-      <h2><%= link_to place.name, place_path(place) %></h2>
-      <p><%= place.address %></p>
-      <p><%= truncate(strip_tags(place.description.to_s), length: 220) %></p>
-    </article>
+<header class="routes-mobile-header">
+  <%= link_to root_path, aria: { label: "Москведение — главная" }, class: "routes-mobile-logo" do %><%= image_tag "mobile-logo.svg", alt: "Москведение" %><% end %>
+  <span>Статьи</span>
+  <button type="button" aria-label="Открыть меню" aria-controls="articles-navigation" aria-expanded="false" data-routes-menu-target="button" data-action="routes-menu#toggle"><i aria-hidden="true">☰</i></button>
+</header>
+<h1 class="visually-hidden">Статьи</h1>
+<div class="article-catalogue">
+  <% @article_sections.each do |section| %>
+    <section class="article-topic-section" aria-labelledby="article-topic-<%= section.fetch("id") %>">
+      <div class="article-topic-header">
+        <div><h2 id="article-topic-<%= section.fetch("id") %>"><%= section.fetch("title") %></h2><p><%= section.fetch("description") %></p></div>
+        <% image = "article_sections/#{section.fetch("image")}" %>
+        <div class="article-topic-image">
+          <% if Rails.root.join("app/assets/images", image).file? %><%= image_tag image, alt: section.fetch("title"), loading: "lazy" %>
+          <% else %><div class="article-topic-placeholder" role="img" aria-label="Место для изображения раздела «<%= section.fetch("title") %>»"></div><% end %>
+        </div>
+      </div>
+      <div class="article-topic-cards">
+        <% section.fetch("cards").each do |card| %>
+          <%= link_to articles_path(topic: card.fetch("topic"), anchor: "article-results"), class: ["article-topic-card", ("selected" if @selected_topic == card.fetch("topic"))], aria: { current: ("true" if @selected_topic == card.fetch("topic")) } do %>
+            <h3><%= card.fetch("title") %></h3>
+            <p><%= card.fetch("description") %></p>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
   <% end %>
-  <% if @places.empty? %><p>Материалы пока не добавлены.</p><% end %>
 </div>
+<details id="article-results" class="catalogue-results" <%= "open" if @selected_topic %>>
+  <summary><%= @selected_topic ? "Материалы: #{Place::ARTICLE_TOPICS.fetch(@selected_topic)}" : "Все статьи из базы" %> <span>(<%= @places.size %>)</span></summary>
+  <% if @selected_topic %><%= link_to "Все темы", articles_path(anchor: "article-results"), class: "catalogue-reset" %><% end %>
+  <div class="article-index">
+    <% @places.each do |place| %><article>
+      <h3><%= link_to place.name, place_path(place) %></h3>
+      <p><%= place.address %></p><p><%= truncate(strip_tags(place.description.to_s), length: 220) %></p>
+    </article><% end %>
+    <% if @places.empty? %><p>Материалы этой темы пока не добавлены.</p><% end %>
+  </div>
+</details>
+<div class="routes-space" aria-hidden="true"></div>
+<footer class="site-footer routes-footer">
+  <div>Цифровой архив Москвы.<br>© Москведение, <%= Date.current.year %></div>
+  <div><%= link_to "Источники", places_path %></div>
+  <div class="footer-links"><button type="button" disabled title="Добавьте ссылку на вашу политику">Политика конфиденциальности</button><button type="button" disabled title="Добавьте контакт проекта">Обратная связь</button></div>
+  <div class="footer-links"><button type="button" disabled title="Добавьте адрес канала">Telegram ↗</button><button type="button" disabled title="Добавьте адрес сообщества">VK ↗</button></div>
+</footer>

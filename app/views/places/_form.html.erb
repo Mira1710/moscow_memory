@@ -10,6 +10,7 @@
       <div class="editor-field"><%= form.label :architectural_style, "Архитектурный стиль" %><%= form.text_field :architectural_style %></div>
       <div class="editor-field"><%= form.label :architect, "Архитектор" %><%= form.text_field :architect %></div>
     </div>
+    <div class="editor-field"><%= form.label :article_topic, "Тема в каталоге статей" %><%= form.select :article_topic, Place::ARTICLE_TOPICS.map { |key, label| [label, key] }, include_blank: "Без темы — только в общем списке" %></div>
     <div class="editor-field"><%= form.label :address, "Адрес" %><%= form.text_field :address %></div>
     <div class="editor-columns">
       <div class="editor-field"><%= form.label :latitude, "Широта" %><%= form.number_field :latitude, step: :any, min: -90, max: 90 %></div>

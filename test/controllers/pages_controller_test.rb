@@ -16,4 +16,20 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get articles_path
     assert_select ".article-index a[href='#{place_path(places(:one))}']", 1
   end
+  test "article themes show only matching saved materials" do
+    place = places(:one)
+    place.update!(article_topic: "sokolniki")
+    get articles_path(topic: "sokolniki")
+    assert_response :success
+    assert_select ".article-topic-section", 3
+    assert_select ".article-topic-card", 9
+    assert_select "#article-results[open]", 1
+    assert_select ".article-index a[href='#{place_path(place)}']", 1
+    assert_select ".article-index a[href='#{place_path(places(:two))}']", 0
+    get articles_path(topic: "sounds")
+    assert_select ".article-index article", 0
+    assert_includes response.body, "Материалы этой темы пока не добавлены"
+    get articles_path(topic: "not-a-topic")
+    assert_select ".article-index article", Place.count
+  end
 end

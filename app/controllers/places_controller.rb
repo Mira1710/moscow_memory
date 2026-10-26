@@ -80,7 +80,7 @@ class PlacesController < ApplicationController
       params.require(:place).permit(
         :name, :description, :address, :latitude, :longitude, :year_from, :year_to,
         :image, :image_cache, :remove_image, :category, :founded, :architectural_style,
-        :architect, :sources, :photo_images_cache, :map_images_cache, :object_images_cache,
+        :architect, :sources, :article_topic, :photo_images_cache, :map_images_cache, :object_images_cache,
         new_photo_images: [], new_map_images: [], new_object_images: [],
         remove_photo_images: [], remove_map_images: [], remove_object_images: [],
         historical_states_attributes: [ :id, :title, :description, :year_from, :year_to,

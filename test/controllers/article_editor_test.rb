@@ -11,7 +11,7 @@ class ArticleEditorTest < ActionDispatch::IntegrationTest
   test "article and period uploads appear on map and survive subsequent edits" do
     post places_path, params: { place: {
       name: "Место из редактора", description: "Текст статьи <script>alert(1)</script>", address: "Москва",
-      latitude: "55.75", longitude: "37.62", category: "public_spaces", founded: "XIX век",
+      latitude: "55.75", longitude: "37.62", category: "public_spaces", article_topic: "maps", founded: "XIX век",
       architectural_style: "Модерн", architect: "Автор", sources: "Архив, фонд 1",
       image: photo, new_photo_images: [ photo ], new_map_images: [ photo ], new_object_images: [ photo ],
       historical_states_attributes: { "0" => { title: "Первый период", description: "История периода", year_from: 1900, year_to: 1950, new_images: [ photo ] } }
@@ -19,6 +19,7 @@ class ArticleEditorTest < ActionDispatch::IntegrationTest
     place = Place.order(:id).last
     assert_redirected_to admin_place_path(place)
     assert_equal "public_spaces", place.category
+    assert_equal "maps", place.article_topic
     assert_equal 1, place.photo_images.size
     assert_equal 1, place.map_images.size
     assert_equal 1, place.object_images.size

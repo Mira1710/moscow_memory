@@ -1,6 +1,12 @@
 class Place < ApplicationRecord
   include ArticleGalleries
 
+  ARTICLE_TOPICS = {
+    "zamoskvorechye" => "Замоскворечье", "sokolniki" => "Сокольники", "basmanny" => "Басманный район",
+    "sukharev_tower" => "Сухарева башня", "mokrinsky_lane" => "Мокринский переулок", "red_gate" => "Красные ворота",
+    "sounds" => "Звуки", "photography" => "Москва в объективе", "maps" => "Старые карты"
+  }.freeze
+
   CATEGORIES = {
     "public_spaces" => "Городские пространства",
     "houses" => "Жилые дома",
@@ -30,6 +36,7 @@ class Place < ApplicationRecord
 
 
   validates :name, presence: true
+  validates :article_topic, inclusion: { in: ARTICLE_TOPICS.keys }, allow_blank: true
   validates :category, inclusion: { in: CATEGORIES.keys }, allow_blank: true
   validates :latitude, numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }, allow_blank: true
   validates :longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }, allow_blank: true
