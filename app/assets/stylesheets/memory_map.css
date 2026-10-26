@@ -175,7 +175,13 @@
 .moscow-memory .place-period-track button { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; background: none; border: 0; border-left: 1px solid #aaa; padding: 4px; font-style: italic; }
 .moscow-memory.article-open .year-track { gap: 8px; overflow-x: auto; }
 .moscow-memory.article-open .year-track button { flex-shrink: 0; }
-.moscow-memory .map [class*="-ground-pane"] { filter: grayscale(1); }
+/* Scheme colors are configured in Yandex API 3; markers keep their SVG colors. */
+.moscow-memory .memory-map-marker { width:44px; height:44px; padding:0; border:0; background:transparent; transform:translate(-50%, -50%); cursor:pointer; }
+.moscow-memory .memory-map-marker img { display:block; width:100%; height:100%; }
+.moscow-memory .memory-map-marker-fallback { width:20px; height:20px; border:3px solid white; border-radius:50%; background:#b71116; }
+.moscow-memory .memory-map-marker:focus-visible { outline:2px solid #b71116; outline-offset:3px; }
+.moscow-memory .memory-map-zoom { position:absolute; left:55%; top:12px; z-index:2; display:flex; gap:4px; }
+.moscow-memory .memory-map-zoom button { width:30px; height:30px; border:1px solid #bbb; background:#f7f7f7; color:#242424; font-size:22px; cursor:pointer; }
 @media(max-width:1000px) {
   .moscow-memory .article { width: calc((100% - 2.5vw - 6px) * .52); }
   .moscow-memory.article-open .timeline { margin-right: 52%; }
@@ -206,3 +212,5 @@
   .moscow-memory.map-page .intro-stack { width: 34%; }
   .moscow-memory.map-page .intro-stack .card { padding: 10px; }
 }
+
+.moscow-memory .legacy-map [class*="-ground-pane"] { filter: grayscale(1); }

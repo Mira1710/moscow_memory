@@ -2,22 +2,34 @@ import { Controller } from "@hotwired/stimulus"
 
 let apiPromise
 function loadMaps(key) {
-  if (window.ymaps) return new Promise((resolve, reject) => window.ymaps.ready(() => resolve(window.ymaps), reject))
+  if (window.ymaps3) return window.ymaps3.ready.then(() => window.ymaps3)
   if (!apiPromise) {
     apiPromise = new Promise((resolve, reject) => {
       const script = document.createElement("script")
       const timer = setTimeout(() => fail(), 20000)
       const fail = () => { clearTimeout(timer); script.remove(); apiPromise = null; reject(new Error("Maps API unavailable")) }
-      script.src = `https://api-maps.yandex.ru/2.1/?apikey=${encodeURIComponent(key)}&lang=ru_RU`
+      script.src = `https://api-maps.yandex.ru/v3/?apikey=${encodeURIComponent(key)}&lang=ru_RU`
       script.onload = () => {
-        if (!window.ymaps) return fail()
-        window.ymaps.ready(() => { clearTimeout(timer); resolve(window.ymaps) }, fail)
+        if (!window.ymaps3) return fail()
+        window.ymaps3.ready.then(() => { clearTimeout(timer); resolve(window.ymaps3) }, fail)
       }
       script.onerror = fail
       document.head.append(script)
     })
   }
   return apiPromise
+}
+
+function loadLegacyMaps(key) {
+  return new Promise((resolve, reject) => {
+    if (window.ymaps) return window.ymaps.ready(() => resolve(window.ymaps), reject)
+    const script = document.createElement("script")
+    const timer = setTimeout(() => { script.remove(); reject(new Error("Maps API unavailable")) }, 20000)
+    script.src = `https://api-maps.yandex.ru/2.1/?apikey=${encodeURIComponent(key)}&lang=ru_RU`
+    script.onload = () => { clearTimeout(timer); window.ymaps ? window.ymaps.ready(() => resolve(window.ymaps), reject) : reject(new Error("Maps API unavailable")) }
+    script.onerror = () => { clearTimeout(timer); script.remove(); reject(new Error("Maps API unavailable")) }
+    document.head.append(script)
+  })
 }
 
 export default class extends Controller {
@@ -50,28 +62,87 @@ export default class extends Controller {
       return
     }
     try {
-      const ymaps = await loadMaps(this.keyValue)
+      const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker } = await loadMaps(this.keyValue)
       if (this.disposed) return
-      this.map = new ymaps.Map(this.mapTarget, { center: [55.7558, 37.6176], zoom: 12, controls: ["zoomControl"] })
-      this.map.behaviors.disable("scrollZoom")
-      this.mapResizeObserver = new ResizeObserver(() => this.map?.container?.fitToViewport())
-      this.mapResizeObserver.observe(this.mapTarget)
-      this.placeTargets.forEach(template => {
-        const { latitude, longitude, placeId } = template.dataset
-        if (!latitude.trim() || !longitude.trim()) return
-        const coords = [Number(latitude), Number(longitude)]
-        if (!coords.every(Number.isFinite) || Math.abs(coords[0]) > 90 || Math.abs(coords[1]) > 180) return
-        const icon = template.dataset.icon
-        const options = icon ? { iconLayout: "default#image", iconImageHref: icon, iconImageSize: [44, 44], iconImageOffset: [-22, -22], openBalloonOnClick: false } : { preset: "islands#redDotIcon", openBalloonOnClick: false }
-        const marker = new ymaps.Placemark(coords, {}, options)
-        marker.events.add("click", () => this.show(placeId))
-        this.markers.set(placeId, marker)
+      this.map = new YMap(this.mapTarget, {
+        location: { center: [37.6176, 55.7558], zoom: 12 },
+        mode: "vector",
+        behaviors: ["drag", "pinchZoom", "dblClick"]
       })
+      this.map.addChild(new YMapDefaultSchemeLayer({
+        customization: [
+          { stylers: [{ saturation: -1 }] },
+          { tags: { all: ["water"] }, elements: "geometry", stylers: [{ color: "#80c2e9" }] }
+        ]
+      }))
+      this.map.addChild(new YMapDefaultFeaturesLayer({}))
+      this.visibleMarkers = new Set()
+      this.placeTargets.forEach(template => {
+        const { latitude, longitude, placeId, name, icon } = template.dataset
+        if (!latitude.trim() || !longitude.trim()) return
+        const lat = Number(latitude), lon = Number(longitude)
+        if (![lat, lon].every(Number.isFinite) || Math.abs(lat) > 90 || Math.abs(lon) > 180) return
+        const button = document.createElement("button")
+        button.type = "button"
+        button.className = "memory-map-marker"
+        button.setAttribute("aria-label", `Открыть статью: ${name || "Место"}`)
+        if (icon) {
+          const image = document.createElement("img")
+          image.src = icon
+          image.alt = ""
+          image.width = image.height = 44
+          button.append(image)
+        } else {
+          button.classList.add("memory-map-marker-fallback")
+        }
+        button.addEventListener("click", event => { event.stopPropagation(); this.show(placeId, button) })
+        this.markers.set(placeId, new YMapMarker({ coordinates: [lon, lat] }, button))
+      })
+      this.zoomControls = document.createElement("div")
+      this.zoomControls.className = "memory-map-zoom"
+      for (const [label, delta] of [["Увеличить карту", 1], ["Уменьшить карту", -1]]) {
+        const button = document.createElement("button")
+        button.type = "button"
+        button.textContent = delta > 0 ? "+" : "−"
+        button.setAttribute("aria-label", label)
+        button.addEventListener("click", () => this.map.update({ location: { zoom: Math.max(2, Math.min(20, this.map.zoom + delta)), duration: 250 } }))
+        this.zoomControls.append(button)
+      }
+      this.mapTarget.append(this.zoomControls)
       this.statusTarget.hidden = true
       this.filter()
     } catch (_) {
-      if (!this.disposed) this.statusTarget.textContent = "Не удалось загрузить Яндекс Карты. Проверьте соединение и настройки ключа. Материалы доступны в архиве."
+      if (this.disposed) return
+      this.map?.destroy()
+      this.map = null
+      try { await this.startLegacy() } catch (_) {
+        if (!this.disposed) { this.statusTarget.hidden = false; this.statusTarget.textContent = "Не удалось загрузить Яндекс Карты. Проверьте соединение и настройки ключа. Материалы доступны в архиве." }
+      }
     }
+  }
+
+  async startLegacy() {
+    const ymaps = await loadLegacyMaps(this.keyValue)
+    if (this.disposed) return
+    this.legacyMap = true
+    this.mapTarget.classList.add("legacy-map")
+    this.map = new ymaps.Map(this.mapTarget, { center: [55.7558, 37.6176], zoom: 12, controls: ["zoomControl"] })
+    this.map.behaviors.disable("scrollZoom")
+    this.mapResizeObserver = new ResizeObserver(() => this.map?.container?.fitToViewport())
+    this.mapResizeObserver.observe(this.mapTarget)
+    this.markers.clear()
+    this.placeTargets.forEach(template => {
+      const { latitude, longitude, placeId, icon } = template.dataset
+      if (!latitude.trim() || !longitude.trim()) return
+      const coords = [Number(latitude), Number(longitude)]
+      if (!coords.every(Number.isFinite) || Math.abs(coords[0]) > 90 || Math.abs(coords[1]) > 180) return
+      const options = icon ? { iconLayout: "default#image", iconImageHref: icon, iconImageSize: [44, 44], iconImageOffset: [-22, -22], openBalloonOnClick: false } : { preset: "islands#redDotIcon", openBalloonOnClick: false }
+      const marker = new ymaps.Placemark(coords, {}, options)
+      marker.events.add("click", () => this.show(placeId))
+      this.markers.set(placeId, marker)
+    })
+    this.statusTarget.hidden = true
+    this.filter()
   }
 
   matches(data) {
@@ -212,9 +283,15 @@ export default class extends Controller {
       })
       const marker = this.markers?.get(id)
       if (marker && this.map) {
-        const added = this.map.geoObjects.indexOf(marker) !== -1
-        if (visible && !added) this.map.geoObjects.add(marker)
-        if (!visible && added) this.map.geoObjects.remove(marker)
+        if (this.legacyMap) {
+          const added = this.map.geoObjects.indexOf(marker) !== -1
+          if (visible && !added) this.map.geoObjects.add(marker)
+          if (!visible && added) this.map.geoObjects.remove(marker)
+        } else {
+        const added = this.visibleMarkers.has(id)
+        if (visible && !added) { this.map.addChild(marker); this.visibleMarkers.add(id) }
+        if (!visible && added) { this.map.removeChild(marker); this.visibleMarkers.delete(id) }
+        }
       }
       if (this.selected === id && !visible) this.close()
     })
@@ -275,6 +352,8 @@ export default class extends Controller {
     this.disposed = true
     window.removeEventListener("resize", this.onViewportChange)
     this.mapResizeObserver?.disconnect()
+    this.zoomControls?.remove()
+    this.visibleMarkers?.clear()
     this.close()
     if (this.sourcesTarget.open) this.sourcesTarget.close()
     this.map?.destroy()

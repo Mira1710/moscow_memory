@@ -12,36 +12,31 @@ class MapNavigationTest < ApplicationSystemTestCase
     # Deterministic substitute for the external provider: exercise our marker callback,
     # without consuming a real API key or depending on Yandex/network availability.
     page.execute_script <<~JS
-      window.ymaps = {
-        ready: callback => callback(),
-        Map: class {
-          constructor(element) {
-            this.behaviors = { disable() {} };
-            this.geoObjects = {
-              indexOf: marker => [...element.children].indexOf(marker.button),
-              add: marker => element.append(marker.button),
-              remove: marker => marker.button.remove()
-            };
-          }
+      window.ymaps3 = {
+        ready: Promise.resolve(),
+        YMap: class {
+          constructor(element, options) { this.element = element; this.zoom = options.location.zoom; }
+          addChild(child) { if (child.button) { child.button.style.position = 'absolute'; child.button.style.left = '60%'; child.button.style.top = '50%'; this.element.append(child.button); } return this; }
+          removeChild(child) { child.button?.remove(); return this; }
+          update() {}
           destroy() {}
         },
-        Placemark: class {
-          constructor() {
-            this.button = document.createElement('button');
-            this.button.textContent = 'Проверочная метка';
-            this.button.style.cssText = 'position:absolute;left:60%;top:50%';
-            this.events = { add: (event, callback) => this.button.addEventListener(event, callback) };
-          }
+        YMapDefaultSchemeLayer: class { constructor(options) { window.testMapCustomization = options.customization; } },
+        YMapDefaultFeaturesLayer: class {},
+        YMapMarker: class {
+          constructor(options, button) { this.button = button; window.testMarkerCoordinates = options.coordinates; }
         }
       };
       const controller = window.Stimulus.getControllerForElementAndIdentifier(document.querySelector('[data-controller="memory-map"]'), 'memory-map');
       controller.keyValue = 'system-test';
       controller.start();
     JS
-    assert_selector ".map button", text: "Проверочная метка"
+    assert_selector ".memory-map-marker"
+    assert_equal [37.62, 55.75], page.evaluate_script("window.testMarkerCoordinates")
+    assert_equal "#80c2e9", page.evaluate_script("window.testMapCustomization[1].stylers[0].color")
     page.save_screenshot(Rails.root.join("tmp/screenshots/timeline-grid.png"))
     bounds = page.evaluate_script("JSON.stringify(document.querySelector('.map').getBoundingClientRect().toJSON())")
-    all(".map button").last.click
+    all(".memory-map-marker").last.click
     assert_selector "#memory-article", visible: true
     assert_equal bounds, page.evaluate_script("JSON.stringify(document.querySelector('.map').getBoundingClientRect().toJSON())")
     assert_operator page.evaluate_script("document.querySelector('#memory-article').getBoundingClientRect().left"), :>, 600
