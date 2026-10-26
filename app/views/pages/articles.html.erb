@@ -19,7 +19,7 @@
         <% end %>
       </div>
       <div class="article-topic-header">
-        <div><h2 id="article-topic-<%= section.fetch("id") %>"><%= section.fetch("title") %></h2><p><%= section.fetch("description") %></p></div>
+        <div><h2 id="article-topic-<%= section.fetch("id") %>"><%= section.fetch("title") %></h2><p><span class="article-topic-description"><%= section.fetch("description") %></span></p></div>
       </div>
       <div class="article-topic-cards">
         <% section.fetch("cards").each do |card| %>

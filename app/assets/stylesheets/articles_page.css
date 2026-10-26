@@ -43,7 +43,8 @@
 /* The artwork occupies the section height behind opaque text frames. */
 .articles-page .article-topic-section { position:relative; isolation:isolate; overflow:hidden; transition:border-color 350ms ease; }
 .articles-page .article-topic-header { position:relative; z-index:1; display:block; padding-right:36%; }
-.articles-page .article-topic-header > div { background:var(--paper); }
+.articles-page .article-topic-header > div { background:transparent; }
+.articles-page .article-topic-description { background:var(--paper); box-decoration-break:clone; -webkit-box-decoration-break:clone; padding:2px 4px 2px 0; }
 .moscow-memory.articles-page .article-topic-header h2 { transition:color 350ms ease; }
 .articles-page .article-topic-image { position:absolute; inset:0 0 0 auto; width:36%; height:100%; border:0; overflow:visible; z-index:0; transform-origin:right center; transition:transform 600ms cubic-bezier(.2,.65,.3,1); pointer-events:none; }
 .articles-page .article-topic-image img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; transition:opacity 450ms ease; }
