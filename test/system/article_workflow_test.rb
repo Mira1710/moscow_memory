@@ -30,9 +30,7 @@ class ArticleWorkflowTest < ApplicationSystemTestCase
     assert_text "Изменения статьи сохранены."
 
     visit root_path
-    click_button "Метки"
-    find("summary", text: "Объекты на карте").click
-    click_button "Обновлённое место"
+    page.execute_script("window.Stimulus.getControllerForElementAndIdentifier(document.querySelector('[data-controller=memory-map]'), 'memory-map').show(arguments[0])", place.id.to_s)
     assert_selector "#memory-article", visible: true
     within "#memory-article" do
       assert_text(/Обновлённое место/i)

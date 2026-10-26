@@ -1,0 +1,87 @@
+/* SVG grid: x=32+116*n in a 1196-wide drawing. Align those lines
+   with the ten content columns, preserving the original grid gutters. */
+.moscow-memory.map-page main {
+  background-origin: content-box;
+  background-size: calc(100% * 1196 / 1160) auto;
+  background-position: 88.888889% top;
+}
+/* Shared column tracks replace the old table borders. */
+.moscow-memory.map-page .timeline { --axis-columns: 10; overflow-x: auto; height: 108px; min-height: 108px; }
+.moscow-memory.map-page .year-track {
+  display: grid;
+  grid-template-columns: repeat(var(--axis-columns), minmax(65px, 1fr));
+  gap: 0;
+  min-height: 52px;
+  padding: 4px 0 10px;
+  overflow: visible;
+  min-width: calc(var(--axis-columns) * 65px);
+  align-items: center;
+}
+.moscow-memory.map-page .year-track::before { top: calc(50% - 3px); width: 100%; }
+.moscow-memory.map-page .year-track button,
+.moscow-memory.map-page .year-track button:last-child {
+  display: grid;
+  place-items: center;
+  justify-self: center;
+  position: relative;
+  width: min(90%, 90px);
+  min-width: 58px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  clip-path: none;
+  background: transparent;
+  isolation: auto;
+  color: #242424;
+}
+.moscow-memory.map-page .year-track button::before { display: none; }
+.moscow-memory.map-page .year-track svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.moscow-memory.map-page .year-track path { fill: var(--paper); stroke: var(--red); stroke-width: 1.25; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.moscow-memory.map-page .year-track button > span { position: relative; z-index: 1; }
+.moscow-memory.map-page .year-track button[aria-pressed=true] { color: white; }
+.moscow-memory.map-page .year-track button[aria-pressed=true] path { fill: var(--red); }
+.moscow-memory.map-page .year-track button:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; border-radius: 6px; }
+.moscow-memory.map-page :is(.period-track, .style-track) {
+  display: grid;
+  grid-template-columns: repeat(var(--axis-columns), minmax(0, 1fr));
+  border: 0;
+  margin: 0;
+  min-width: calc(var(--axis-columns) * 65px);
+  min-height: 26px;
+  align-items: start;
+}
+.moscow-memory.map-page :is(.period-track button, .style-track span, .place-period-track button) {
+  position: relative;
+  border: 0;
+  background: none;
+  padding: 5px 5px 0;
+  min-width: 0;
+  line-height: 1.3;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.moscow-memory.map-page :is(.period-track button, .place-period-track button)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 7px;
+  border-top: 2px solid #242424;
+  border-left: 2px solid #242424;
+}
+.moscow-memory.map-page .period-track button { font-style: italic; }
+.moscow-memory.map-page .style-track span { color: #929292; font-weight: 350; padding-top: 5px; }
+.moscow-memory.map-page .style-track span::before { content: ""; position: absolute; top: 0; left: 1px; right: 1px; height: 1px; background: #929292; }
+.moscow-memory.map-page .place-period-track { border-top: 0; gap: 0; }
+@media (max-width: 767px) {
+  .moscow-memory.map-page .timeline { height: auto; min-height: 86px; margin: 0; }
+  .moscow-memory.map-page .year-track { min-height: 42px; padding: 4px 0 8px; grid-template-columns: repeat(var(--axis-columns), minmax(58px, 1fr)); min-width: calc(var(--axis-columns) * 58px); }
+  .moscow-memory.map-page .year-track button { width: min(94%, 80px); min-width: 54px; height: 28px; }
+  .moscow-memory.map-page :is(.period-track, .style-track) { min-height: 22px; margin: 0; min-width: calc(var(--axis-columns) * 58px); }
+  .moscow-memory.map-page .period-track button { font-size: 10px; }
+  .moscow-memory.map-page .style-track span { font-size: 10px; }
+}

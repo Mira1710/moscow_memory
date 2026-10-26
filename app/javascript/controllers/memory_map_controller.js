@@ -46,7 +46,7 @@ export default class extends Controller {
 
   async start() {
     if (!this.keyValue.trim()) {
-      this.statusTarget.textContent = "Карта будет доступна после настройки API-ключа. Статьи доступны в списке мест."
+      this.statusTarget.textContent = "Карта будет доступна после настройки API-ключа. Материалы доступны в архиве."
       return
     }
     try {
@@ -70,7 +70,7 @@ export default class extends Controller {
       this.statusTarget.hidden = true
       this.filter()
     } catch (_) {
-      if (!this.disposed) this.statusTarget.textContent = "Не удалось загрузить Яндекс Карты. Проверьте соединение и настройки ключа. Статьи доступны в списке."
+      if (!this.disposed) this.statusTarget.textContent = "Не удалось загрузить Яндекс Карты. Проверьте соединение и настройки ключа. Материалы доступны в архиве."
     }
   }
 
@@ -107,23 +107,47 @@ export default class extends Controller {
       return button
     }))
     if (this.selected && !states.length) this.placePeriodsTarget.textContent = "Исторические периоды этого места пока не добавлены."
-    this.yearsTarget.replaceChildren(...years.map(year => {
+    const timeline = this.element.querySelector(".timeline")
+    const mobile = window.matchMedia("(max-width: 767px)").matches
+    const axisColumns = Math.max(mobile ? 5 : 10, years.length)
+    timeline.style.setProperty("--axis-columns", axisColumns)
+    this.yearsTarget.replaceChildren(...years.map((year, index) => {
       const button = document.createElement("button")
       button.type = "button"
-      button.textContent = year
+      const label = document.createElement("span")
+      label.textContent = year
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+      svg.setAttribute("viewBox", "0 0 100 38")
+      svg.setAttribute("preserveAspectRatio", "none")
+      svg.setAttribute("aria-hidden", "true")
+      svg.setAttribute("focusable", "false")
+      const shape = document.createElementNS(svg.namespaceURI, "path")
+      shape.setAttribute("d", index === years.length - 1
+        ? "M10 2H90Q98 2 98 10V28Q98 36 90 36H10Q2 36 2 28V10Q2 2 10 2Z"
+        : "M2 19L17 5Q20 2 26 2H74Q80 2 83 5L98 19L83 33Q80 36 74 36H26Q20 36 17 33Z")
+      svg.append(shape)
+      button.append(svg, label)
+      button.style.gridColumn = Math.round(index * (axisColumns - 1) / Math.max(1, years.length - 1)) + 1
       button.dataset.year = year
       button.dataset.action = "memory-map#selectYear"
       return button
     }))
+    const trackEnds = new Map()
     this.element.querySelectorAll("[data-axis-from]").forEach(item => {
       const overlap = Math.min(Number(item.dataset.axisTo), end) - Math.max(Number(item.dataset.axisFrom), start)
       item.hidden = overlap <= 0
-      item.style.flex = `${Math.max(0, overlap)} 1 0`
+      if (item.hidden) return
+      const count = axisColumns
+      const length = Math.max(1, end - start)
+      const left = Math.max(trackEnds.get(item.parentElement) || 0, Math.min(count - 1, Math.round((Number(item.dataset.axisFrom) - start) / length * count)))
+      const right = Math.max(left + 1, Math.min(count, Math.round((Number(item.dataset.axisTo) - start) / length * count)))
+      item.style.gridColumn = `${left + 1} / ${right + 1}`
+      trackEnds.set(item.parentElement, right)
     })
     this.updateYearButtons()
     if (window.matchMedia("(max-width: 767px)").matches) {
       const selectedButton = this.yearsTarget.querySelector('[aria-pressed="true"]')
-      this.yearsTarget.scrollLeft = selectedButton ? selectedButton.offsetLeft - this.yearsTarget.clientWidth / 2 : this.yearsTarget.scrollWidth
+      timeline.scrollLeft = selectedButton ? selectedButton.offsetLeft - timeline.clientWidth / 2 : timeline.scrollWidth
     }
   }
 
@@ -183,7 +207,7 @@ export default class extends Controller {
     this.placeTargets.forEach(template => {
       const id = template.dataset.placeId
       const checkboxes = [...this.element.querySelectorAll(".category-filter input")]
-      const categoryVisible = !checkboxes.length || checkboxes.some(input => input.checked && input.value === template.dataset.category)
+      const categoryVisible = template.dataset.category === "uncategorized" || !checkboxes.length || checkboxes.some(input => input.checked && input.value === template.dataset.category)
       const visible = categoryVisible && (this.allYearsTarget.checked || this.matches(template.dataset))
       this.element.querySelectorAll(".place-link").forEach(button => {
         if (button.dataset.placeId === id) button.hidden = !visible

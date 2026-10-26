@@ -30,8 +30,7 @@
         <button class="panel-toggle" type="button" data-action="memory-map#togglePanel" aria-expanded="false" aria-controls="memory-place-list">Метки <span aria-hidden="true">+</span></button>
         <div id="memory-place-list" class="place-list" hidden>
           <div class="category-list" role="group" aria-label="Категории меток">
-            <% categories = HomeHelper::MAP_CATEGORIES.merge(@places.any? { |place| map_place_category(place) == "uncategorized" } ? { "uncategorized" => "Без категории" } : {}) %>
-            <% categories.each do |key, label| %>
+            <% HomeHelper::MAP_CATEGORIES.each do |key, label| %>
               <label class="category-filter">
                 <input type="checkbox" checked value="<%= key %>" data-action="memory-map#filter">
                 <% if (icon = map_category_asset(key)) %><%= image_tag icon, alt: "", class: "category-icon" %><% else %><span class="category-icon category-icon-empty" aria-hidden="true"></span><% end %>
@@ -39,12 +38,7 @@
               </label>
             <% end %>
           </div>
-          <details class="map-object-list"><summary>Объекты на карте</summary>
-          <% @places.each do |place| %>
-            <button type="button" class="link place-link" data-action="memory-map#open" data-place-id="<%= place.id %>" aria-controls="memory-article" aria-expanded="false"><%= place.name %></button>
-          <% end %>
-          <% if @places.empty? %><p>В архиве пока нет объектов.</p><% end %>
-          </details>
+
         </div>
       </section>
       <section class="interval" aria-label="Шаг временной шкалы">

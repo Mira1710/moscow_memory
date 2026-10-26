@@ -36,6 +36,7 @@ class MapNavigationTest < ApplicationSystemTestCase
       controller.start();
     JS
     assert_selector ".map button", text: "Проверочная метка"
+    page.save_screenshot(Rails.root.join("tmp/screenshots/timeline-grid.png"))
     bounds = page.evaluate_script("JSON.stringify(document.querySelector('.map').getBoundingClientRect().toJSON())")
     all(".map button").last.click
     assert_selector "#memory-article", visible: true

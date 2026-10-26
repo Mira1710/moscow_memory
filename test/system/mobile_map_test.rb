@@ -22,8 +22,7 @@ class MobileMapTest < ApplicationSystemTestCase
       assert_selector ".year-track button", text: "2000"
       click_button "1 год"
       assert_selector ".interval-buttons button[aria-pressed=true]", text: "1 год"
-      find("summary", text: "Объекты на карте").click
-      click_button place.name
+      page.execute_script("window.Stimulus.getControllerForElementAndIdentifier(document.querySelector('[data-controller=memory-map]'), 'memory-map').show(arguments[0])", place.id.to_s)
       assert_selector ".map-page.article-open"
       assert_selector "#memory-article", visible: true
       assert_no_selector ".timeline", visible: true
