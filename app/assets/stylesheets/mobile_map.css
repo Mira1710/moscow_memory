@@ -90,7 +90,7 @@
   .moscow-memory.map-page .map-object-list { margin-top: 4px; font-size: 11px; }
   .moscow-memory.map-page .map-object-list summary { min-height: 32px; padding-top: 7px; cursor: pointer; }
   .moscow-memory.map-page .place-link { min-height: 32px; margin: 0; padding: 5px 0; }
-  .moscow-memory.map-page .interval { bottom: 0; border-radius: 8px 0 0 0; overflow: hidden; }
+  .moscow-memory.map-page .interval { bottom: 0; border-radius: 0 14px 0 0; overflow: hidden; }
   .moscow-memory.map-page .interval-buttons { gap: 5px; padding: 6px; }
   .moscow-memory.map-page .interval-buttons button { min-height: 32px; flex: 1; padding: 5px 3px; font-size: 11px; }
   .moscow-memory.map-page .map-status { inset: auto 8px 110px; font-size: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 6px; }
