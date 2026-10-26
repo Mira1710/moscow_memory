@@ -122,9 +122,7 @@ export default class extends Controller {
       svg.setAttribute("aria-hidden", "true")
       svg.setAttribute("focusable", "false")
       const shape = document.createElementNS(svg.namespaceURI, "path")
-      shape.setAttribute("d", index === years.length - 1
-        ? "M10 2H90Q98 2 98 10V28Q98 36 90 36H10Q2 36 2 28V10Q2 2 10 2Z"
-        : "M2 19L17 5Q20 2 26 2H74Q80 2 83 5L98 19L83 33Q80 36 74 36H26Q20 36 17 33Z")
+      shape.setAttribute("d", "M2 19L17 5Q20 2 26 2H74Q80 2 83 5L98 19L83 33Q80 36 74 36H26Q20 36 17 33Z")
       svg.append(shape)
       button.append(svg, label)
       button.style.gridColumn = Math.round(index * (axisColumns - 1) / Math.max(1, years.length - 1)) + 1

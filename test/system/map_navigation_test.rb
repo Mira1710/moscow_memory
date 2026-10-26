@@ -6,6 +6,9 @@ class MapNavigationTest < ApplicationSystemTestCase
     place.update!(description: "История места. " * 200, category: "public_spaces", latitude: 55.75, longitude: 37.62)
     visit root_path
     assert_selector "[data-controller='memory-map']"
+    click_button "Метки"
+    assert_selector ".category-filter", count: 8
+    assert page.evaluate_script("document.querySelector('.place-list').scrollHeight <= document.querySelector('.place-list').clientHeight + 1")
     # Deterministic substitute for the external provider: exercise our marker callback,
     # without consuming a real API key or depending on Yandex/network availability.
     page.execute_script <<~JS
