@@ -109,6 +109,11 @@ export default class extends Controller {
         this.zoomControls.append(button)
       }
       this.mapTarget.append(this.zoomControls)
+      this.zoomLayoutObserver = new ResizeObserver(() => this.positionZoomControls())
+      for (const element of [this.mapTarget, this.element.querySelector(".map-places"), this.element.querySelector(".interval")]) {
+        if (element) this.zoomLayoutObserver.observe(element)
+      }
+      this.positionZoomControls()
       this.statusTarget.hidden = true
       this.filter()
     } catch (_) {
@@ -143,6 +148,18 @@ export default class extends Controller {
     })
     this.statusTarget.hidden = true
     this.filter()
+  }
+
+  positionZoomControls() {
+    if (!this.zoomControls) return
+    const map = this.mapTarget.getBoundingClientRect()
+    const legend = this.element.querySelector(".map-places")
+    const interval = this.element.querySelector(".interval")
+    if (!legend || !interval || !map.height) return
+    const bottom = interval.getBoundingClientRect().top
+    legend.style.maxHeight = `${Math.max(40, bottom - map.top - 64)}px`
+    const top = legend.getBoundingClientRect().bottom
+    this.zoomControls.style.top = `${(top + bottom) / 2 - map.top}px`
   }
 
   matches(data) {
@@ -352,6 +369,7 @@ export default class extends Controller {
     this.disposed = true
     window.removeEventListener("resize", this.onViewportChange)
     this.mapResizeObserver?.disconnect()
+    this.zoomLayoutObserver?.disconnect()
     this.zoomControls?.remove()
     this.visibleMarkers?.clear()
     this.close()
