@@ -7,6 +7,7 @@
     <meta name="application-name" content="Moscow Memory">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
+    <% if controller_path.start_with?("admin/") || %w[user_accounts profile_submissions].include?(controller_name) %><meta name="turbo-cache-control" content="no-cache"><% end %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
@@ -24,6 +25,7 @@
   </head>
 
   <body>
+    <% if (role = session.delete(:tab_login_role)).present? %><meta name="tab-login-role" content="<%= role %>"><% end %>
     <%= content_for?(:content) ? yield(:content) : yield %>
   </body>
 </html>

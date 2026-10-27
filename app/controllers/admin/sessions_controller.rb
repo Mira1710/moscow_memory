@@ -15,7 +15,10 @@ module Admin
     def create
       admin = AdminUser.authenticate_by(email: params[:email].to_s.strip.downcase, password: params[:password].to_s)
       if admin
+        member_session = session.to_hash.slice("user_id", "user_session_version")
         reset_session
+        session.update(member_session)
+        session[:tab_login_role] = "admin"
         session[:admin_user_id] = admin.id
         session[:admin_authenticated_at] = Time.current.to_i
         redirect_to admin_places_path, status: :see_other
@@ -26,7 +29,8 @@ module Admin
     end
 
     def destroy
-      reset_session
+      session.delete(:admin_user_id)
+      session.delete(:admin_authenticated_at)
       redirect_to admin_login_path, status: :see_other
     end
 
@@ -38,7 +42,10 @@ module Admin
       return head :not_found unless local_setup_allowed? && !AdminUser.exists?
       @admin = AdminUser.new(params.require(:admin_user).permit(:email, :password, :password_confirmation))
       if @admin.save
+        member_session = session.to_hash.slice("user_id", "user_session_version")
         reset_session
+        session.update(member_session)
+        session[:tab_login_role] = "admin"
         session[:admin_user_id] = @admin.id
         session[:admin_authenticated_at] = Time.current.to_i
         redirect_to admin_places_path, status: :see_other

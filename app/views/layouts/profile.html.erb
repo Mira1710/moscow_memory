@@ -1,5 +1,5 @@
 <% content_for :content do %>
-<div class="moscow-memory section-page routes-page profile-page" data-controller="routes-menu" data-action="keydown.esc@window->routes-menu#close">
+<div <%= 'data-account-role="user" style="visibility:hidden"'.html_safe if current_user %> class="moscow-memory section-page routes-page profile-page" data-controller="routes-menu" data-action="keydown.esc@window->routes-menu#close">
   <%= render "shared/sidebar", active_section: "profile" %>
   <main>
     <header class="routes-mobile-header">

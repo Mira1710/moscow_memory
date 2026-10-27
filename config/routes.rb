@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  delete "tab_session", to: "tab_sessions#destroy"
   post "launch_subscriptions", to: "launch_subscriptions#create", as: :launch_subscriptions
 
   namespace :admin do

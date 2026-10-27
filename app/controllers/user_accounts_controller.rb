@@ -67,7 +67,10 @@ class UserAccountsController < ApplicationController
   private
 
   def sign_in(user)
+    admin_session = session.to_hash.slice("admin_user_id", "admin_authenticated_at")
     reset_session
+    session.update(admin_session)
+    session[:tab_login_role] = "user"
     session[:user_id] = user.id
     session[:user_session_version] = user.session_version
   end

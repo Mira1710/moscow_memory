@@ -1,5 +1,5 @@
 <% content_for :content do %>
-  <div class="admin-shell <%= "admin-auth-screen" unless admin_signed_in? %>">
+  <div <%= 'data-account-role="admin" style="visibility:hidden"'.html_safe if admin_signed_in? %> class="admin-shell <%= "admin-auth-screen" unless admin_signed_in? %>">
     <% if admin_signed_in? %><%= render "admin/shared/sidebar" %><% end %>
     <main class="admin-main">
       <header class="admin-topbar">
