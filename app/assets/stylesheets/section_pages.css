@@ -19,3 +19,17 @@
 .moscow-memory .article-index { display: grid; gap: 20px; }
 .moscow-memory .article-index article { border-top: 1px solid var(--line); padding-top: 20px; }
 .moscow-memory .article-index h2 { font-size: 1.4em; }
+
+.moscow-memory.section-page.forum-page main {
+  --forum-grid-unit:calc((83vw - 12px) / 1196);
+  padding:calc(var(--forum-grid-unit) * 16) calc(var(--forum-grid-unit) * 20) 40px calc(var(--forum-grid-unit) * 32);
+}
+.moscow-memory.forum-page .section-content {
+  max-width:none;
+  min-height:calc(var(--forum-grid-unit) * 248);
+  padding:calc(var(--forum-grid-unit) * 16);
+}
+@media(max-width:767px) {
+  .moscow-memory.section-page.forum-page main { padding:16px 12px 32px; }
+  .moscow-memory.forum-page .section-content { min-height:0; padding:18px; }
+}

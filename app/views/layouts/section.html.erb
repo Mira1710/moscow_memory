@@ -1,5 +1,5 @@
 <% content_for :content do %>
-  <div data-controller="<%= "routes-menu" if %w[routes articles about].include?(action_name) %>" data-action="<%= "keydown.esc@window->routes-menu#close" if %w[routes articles about].include?(action_name) %>" class="moscow-memory section-page <%= "about-page" if action_name == "about" %> <%= "routes-page" if action_name == "routes" %> <%= "articles-page" if action_name == "articles" %>">
+  <div data-controller="<%= "routes-menu" if %w[routes articles about].include?(action_name) %>" data-action="<%= "keydown.esc@window->routes-menu#close" if %w[routes articles about].include?(action_name) %>" class="moscow-memory section-page <%= "forum-page" if action_name == "forum" %> <%= "about-page" if action_name == "about" %> <%= "routes-page" if action_name == "routes" %> <%= "articles-page" if action_name == "articles" %>">
     <%= render "shared/sidebar", active_section: action_name %>
     <main <%= 'data-controller="about-story"'.html_safe if action_name == "about" %>>
       <% if %w[about routes articles].include?(action_name) %>
