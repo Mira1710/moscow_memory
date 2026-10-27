@@ -1,0 +1,2 @@
+.moscow-memory, .admin-shell, .editor-page { font-weight:200; }
+:is(.moscow-memory,.admin-shell,.editor-page) :is(p,li,a,span,label,input,textarea,select,button,dt,dd,figcaption,legend,b,strong) { font-weight:200!important; }

@@ -6,7 +6,7 @@
     <div class="about-question" aria-hidden="true">?</div>
     <div class="about-time-bridge" aria-label="От прошлого к настоящему">
       <span class="about-bridge-end">тогда</span>
-      <div class="about-bridge-years"><% (1950..2020).step(10).each do |year| %><span><%= year %></span><% end %></div>
+      <div class="about-bridge-years"><% (1950..2020).step(10).each do |year| %><%= render "shared/timeline_year", year: year %><% end %></div>
       <span class="about-bridge-end">сейчас</span>
     </div>
     <div class="about-bridge-periods"><span>ВОВ и восстановление</span><span>Расширение периферии</span><span>Жилые дома</span><span>Коммерциализация</span><span>Современный урбанизм</span></div>
@@ -53,7 +53,7 @@
     </div>
     <div>
       <%= render "about_image", filename: "map-history.jpg", alt: "Места Москвы и их исторические состояния", css_class: "about-map-image" %>
-      <div class="about-mini-timeline" aria-label="Пример временной шкалы"><% (2022..2026).each do |year| %><span><%= year %></span><% end %></div>
+      <div class="about-mini-timeline" aria-label="Пример временной шкалы"><% (2022..2026).each do |year| %><%= render "shared/timeline_year", year: year %><% end %></div>
     </div>
   </div>
 </section>

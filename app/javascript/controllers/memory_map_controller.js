@@ -157,7 +157,7 @@ export default class extends Controller {
     const interval = this.element.querySelector(".interval")
     if (!legend || !interval || !map.height) return
     const bottom = interval.getBoundingClientRect().top
-    legend.style.maxHeight = `${Math.max(40, bottom - map.top - 64)}px`
+    legend.style.maxHeight = `${Math.max(40, bottom - map.top - 80)}px`
     const top = legend.getBoundingClientRect().bottom
     this.zoomControls.style.top = `${(top + bottom) / 2 - map.top}px`
   }
