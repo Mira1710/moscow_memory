@@ -1,2 +1,5 @@
 .moscow-memory, .admin-shell, .editor-page { font-weight:200; }
 :is(.moscow-memory,.admin-shell,.editor-page) :is(p,li,a,span,label,input,textarea,select,button,dt,dd,figcaption,legend,b,strong) { font-weight:200!important; }
+
+:is(.moscow-memory,.admin-shell) nav :is(a,button), :is(.moscow-memory,.admin-shell) nav a span { font-weight:500!important; }
+.moscow-memory .article-facts dt { font-weight:500!important; }
