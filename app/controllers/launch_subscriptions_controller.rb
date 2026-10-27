@@ -8,7 +8,6 @@ class LaunchSubscriptionsController < ApplicationController
     end
 
     email = params[:email].to_s.strip.downcase
-    # The same response for existing and new addresses avoids revealing the list.
     subscription = LaunchSubscription.find_or_initialize_by(email: email)
     if subscription.new_record?
       subscription.assign_attributes(consent_accepted_at: Time.current, source: params[:source] == "about" ? "about" : "map")

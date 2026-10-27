@@ -3,18 +3,15 @@ class PlacesController < ApplicationController
   before_action :require_admin, except: %i[index show]
   before_action :set_place, only: %i[ show edit update destroy ]
 
-  # GET /places or /places.json
   def index
     @places = Place.includes(:historical_states).order(:name)
     render "places/index"
   end
 
-  # GET /places/1 or /places/1.json
   def show
     render "places/show"
   end
 
-  # GET /places/new
   def new
     return redirect_to new_admin_place_path unless controller_path.start_with?("admin/")
     @place = Place.new
@@ -22,13 +19,11 @@ class PlacesController < ApplicationController
     render "places/new"
   end
 
-  # GET /places/1/edit
   def edit
     return redirect_to edit_admin_place_path(@place) unless controller_path.start_with?("admin/")
     render "places/edit"
   end
 
-  # POST /places or /places.json
   def create
     @place = Place.new(place_params)
 
@@ -43,7 +38,6 @@ class PlacesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /places/1 or /places/1.json
   def update
     respond_to do |format|
       if @place.update(place_params)
@@ -56,7 +50,6 @@ class PlacesController < ApplicationController
     end
   end
 
-  # DELETE /places/1 or /places/1.json
   def destroy
     @place.destroy!
 
@@ -67,7 +60,6 @@ class PlacesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def places_layout
       controller_path.start_with?("admin/") || !%w[index show].include?(action_name) ? "admin" : "application"
     end

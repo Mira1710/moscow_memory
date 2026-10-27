@@ -26,7 +26,6 @@ class TabSessionTest < ApplicationSystemTestCase
     assert_current_path admin_places_path
     assert_selector '.admin-shell[data-account-role="admin"]'
 
-    # A new independent tab has the same cookies, but no tab session marker.
     new_tab = open_new_window
     within_window new_tab do
       visit admin_places_path

@@ -146,7 +146,6 @@
   .moscow-memory .intro-stack { overflow-y: auto; }
 }
 
-/* The initial screen and selected-place screen share an unchanged map viewport. */
 .moscow-memory main { position: relative; }
 .moscow-memory .menu-link { overflow: hidden; }
 .moscow-memory .menu-link:hover { background: #ededed; }
@@ -175,7 +174,7 @@
 .moscow-memory .place-period-track button { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; background: none; border: 0; border-left: 1px solid #aaa; padding: 4px; font-style: italic; }
 .moscow-memory.article-open .year-track { gap: 8px; overflow-x: auto; }
 .moscow-memory.article-open .year-track button { flex-shrink: 0; }
-/* Scheme colors are configured in Yandex API 3; markers keep their SVG colors. */
+
 .moscow-memory .memory-map-marker { width:44px; height:44px; padding:0; border:0; background:transparent; transform:translate(-50%, -50%); cursor:pointer; }
 .moscow-memory .memory-map-marker img { display:block; width:100%; height:100%; }
 .moscow-memory .memory-map-marker-fallback { width:20px; height:20px; border:3px solid white; border-radius:50%; background:#b71116; }
@@ -197,7 +196,6 @@
 
 .moscow-memory .timeline { height: 108px; min-height: 108px; }
 
-/* More room for the map: compact introduction and signup cards. */
 @media (min-width: 768px) {
   .moscow-memory.map-page .intro-stack { width: 26%; gap: 8px; font-size: clamp(11px, .82vw, 14px); }
   .moscow-memory.map-page .intro-stack .card { padding: 14px; }

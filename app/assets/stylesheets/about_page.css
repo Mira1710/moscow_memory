@@ -1,4 +1,3 @@
-/* The outer frame/grid stays still. Scroll motion belongs to inner frames only. */
 .moscow-memory.section-page.about-page { font-weight: 200; }
 .moscow-memory.section-page.about-page::after { content: ""; position: absolute; inset: 16px 20px 16px calc(var(--side) + 32px); border: 1px solid #d2d2d2; pointer-events: none; z-index: 7; }
 .moscow-memory.section-page.about-page main { position: relative; display: block; height: 100%; padding: 0; overflow-x: clip; overflow-y: auto; scroll-behavior: auto; overscroll-behavior-y: contain; scrollbar-gutter: stable; background-attachment: scroll; }

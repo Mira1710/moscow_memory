@@ -74,5 +74,4 @@ class UserAccountsTest < ActionDispatch::IntegrationTest
     patch admin_profile_submission_path(submission), params: { profile_submission: { status: "invalid" } }
     assert_equal "accepted", submission.reload.status
   end
-
 end

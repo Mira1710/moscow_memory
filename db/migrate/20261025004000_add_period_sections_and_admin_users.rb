@@ -14,7 +14,6 @@ class AddPeriodSectionsAndAdminUsers < ActiveRecord::Migration[8.1]
       t.timestamps
     end
     add_index :admin_users, :email, unique: true
-    # One owner account. This also prevents concurrent first-account setup.
     add_index :admin_users, "(true)", unique: true, name: "index_admin_users_single_owner"
   end
 end

@@ -9,8 +9,6 @@ class MapNavigationTest < ApplicationSystemTestCase
     click_button "Метки"
     assert_selector ".category-filter", count: 8
     assert page.evaluate_script("document.querySelector('.place-list').scrollHeight <= document.querySelector('.place-list').clientHeight + 1")
-    # Deterministic substitute for the external provider: exercise our marker callback,
-    # without consuming a real API key or depending on Yandex/network availability.
     page.execute_script <<~JS
       window.ymaps3 = {
         ready: Promise.resolve(),
@@ -32,7 +30,7 @@ class MapNavigationTest < ApplicationSystemTestCase
       controller.start();
     JS
     assert_selector ".memory-map-marker"
-    assert_equal [37.62, 55.75], page.evaluate_script("window.testMarkerCoordinates")
+    assert_equal [ 37.62, 55.75 ], page.evaluate_script("window.testMarkerCoordinates")
     assert_equal "#80c2e9", page.evaluate_script("window.testMapCustomization[1].stylers[0].color")
     page.save_screenshot(Rails.root.join("tmp/screenshots/timeline-grid.png"))
     bounds = page.evaluate_script("JSON.stringify(document.querySelector('.map').getBoundingClientRect().toJSON())")

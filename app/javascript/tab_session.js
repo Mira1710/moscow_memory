@@ -1,4 +1,3 @@
-// sessionStorage survives reloads, but belongs to the current browser tab.
 const keyFor = role => `moscow-memory:${role}:signed-in`
 
 function checkTabSession() {
@@ -15,8 +14,6 @@ function checkTabSession() {
       account.style.visibility = "visible"
       return
     }
-    // A fresh tab must sign in again; never log out on unload/pagehide,
-    // because those events also run on refresh and navigation.
     const csrf = document.querySelector('meta[name="csrf-token"]')?.content
     fetch("/tab_session", {
       method: "DELETE", credentials: "same-origin",

@@ -35,7 +35,6 @@ class Place < ApplicationRecord
     !enabled && text.all? { |key| attributes[key].blank? } && uploads.all? { |key| Array(attributes[key]).reject(&:blank?).empty? }
   end
 
-
   validates :name, presence: true
   validates :article_topic, inclusion: { in: ARTICLE_TOPICS.keys }, allow_blank: true
   validates :category, inclusion: { in: CATEGORIES.keys }, allow_blank: true

@@ -1,4 +1,3 @@
-/* Articles catalogue; fonts, sidebar and grid use the shared site styles. */
 .articles-page .article-catalogue { display: grid; gap: 16px; }
 .articles-page .article-topic-section { padding: 26px 16px 16px; border: 1px solid #e3e3e3; background: var(--paper); }
 .articles-page .article-topic-header { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: end; gap: 24px; margin-bottom: 18px; }
@@ -40,7 +39,6 @@
 
 .moscow-memory.articles-page .catalogue-results > h2 { font: 400 40px/1 "Aempirial", serif; margin: 6px 0 12px; }
 
-/* The artwork occupies the section height behind opaque text frames. */
 .articles-page .article-topic-section { position:relative; isolation:isolate; overflow:hidden; transition:border-color 350ms ease; }
 .articles-page .article-topic-header { position:relative; z-index:1; display:block; padding-right:36%; }
 .articles-page .article-topic-header > div { background:transparent; }

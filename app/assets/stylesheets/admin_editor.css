@@ -5,7 +5,6 @@
 .editor-optional-section [hidden] { display: none; }
 .moscow-memory .period-subsection h4 { font-family: "Geologica", sans-serif; margin: 20px 0 12px; font-size: 1.2em; font-weight: 500; }
 
-/* Admin has its own shell, navigation and page background. */
 .admin-shell { --admin-side: 17%; position: fixed; inset: 0; overflow: hidden; background: #f7f7f7 url("site-grid.svg") left top / 100% auto repeat-y; color: #242424; font-family: "Geologica", Arial, sans-serif; font-size: 14px; }
 .admin-shell *, .admin-shell *::before, .admin-shell *::after { box-sizing: border-box; }
 .admin-main { height: 100%; overflow-y: auto; margin-left: var(--admin-side); }
