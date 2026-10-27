@@ -32,8 +32,6 @@ Rails.application.routes.draw do
   post "login", to: "user_accounts#login"
   delete "logout", to: "user_accounts#logout", as: :user_logout
   resources :profile_submissions, only: [ :new, :create ]
-  resources :saved_routes, only: [ :create, :destroy ]
-  resources :saved_places, only: [ :create, :destroy ]
 
   root "home#index"
 end

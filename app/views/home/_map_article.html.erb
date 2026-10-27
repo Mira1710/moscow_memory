@@ -3,7 +3,6 @@
   <% if place.image.present? %><%= image_tag place.image.url, class: "place-image", alt: place.name %><% end %>
 </div>
 <h2 tabindex="-1"><%= place.name %></h2>
-<% unless admin_interface? %><%= button_to "В избранное", saved_places_path(place_id: place.id), class: "profile-primary" %><% end %>
 <dl class="article-facts">
   <dt>Категория метки:</dt><dd><%= HomeHelper::MAP_CATEGORIES[map_place_category(place)] || "Не указана" %></dd>
   <dt>Даты основания:</dt><dd><%= settings["founded"].presence || place.year_from || "Не указаны" %></dd>

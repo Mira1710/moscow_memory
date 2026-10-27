@@ -22,11 +22,8 @@
   </div>
 </section>
 <section class="profile-personal profile-panel" id="profile-favorites"><h2>Персональное</h2><h3>Избранное</h3><h4 class="profile-label">Статьи</h4>
-<div class="profile-favorites"><% @favorites.each do |place| %><article class="profile-item"><%= link_to place_path(place) do %><h4><%= place.name %></h4><p><%= truncate(strip_tags(place.description.to_s), length: 180) %></p><% end %><%= button_to "Убрать из избранного", saved_place_path(current_user.saved_places.find_by!(place_id: place.id)), method: :delete %></article><% end %></div>
-<% if @favorites.empty? %><p class="profile-empty">Откройте статью и нажмите «В избранное», чтобы сохранить её здесь.</p><% end %>
-<h4 class="profile-label">Маршруты</h4><div class="profile-card-row">
-<% current_user.saved_routes.order(created_at: :desc).each do |saved| %><% card = saved.card %><% next unless card %><article class="profile-item"><% image = "routes/#{card.fetch("image")}" %><% if Rails.root.join("app/assets/images", image).file? %><%= image_tag image, alt: card.fetch("alt"), loading: "lazy" %><% else %><div class="profile-image-placeholder"></div><% end %><h4><%= card.fetch("title") %></h4><%= button_to "Убрать", saved_route_path(saved), method: :delete %></article><% end %>
-</div><% if current_user.saved_routes.empty? %><p class="profile-empty">Сохраняйте понравившиеся маршруты на странице «Маршруты».</p><% end %>
+<p class="profile-empty">Избранные статьи появятся здесь позже.</p>
+<h4 class="profile-label">Маршруты</h4><p class="profile-empty">Избранные маршруты появятся здесь позже.</p>
 <section id="profile-settings"><h3>Настройки</h3><%= render "errors", record: @user if @user %>
 <%= form_with model: current_user, url: profile_path, method: :patch, class: "profile-settings-form" do |f| %>
 <%= f.label :name, "Имя" %><%= f.text_field :name, required: true %>

@@ -44,7 +44,6 @@ class UserAccountsController < ApplicationController
 
   def show
     @submissions = current_user.profile_submissions.order(created_at: :desc)
-    @favorites = current_user.favorite_places.order(:name)
   end
 
   def update
@@ -61,7 +60,6 @@ class UserAccountsController < ApplicationController
       redirect_to profile_path(anchor: "profile-settings"), notice: "Настройки сохранены.", status: :see_other
     else
       @submissions = @user.profile_submissions.order(created_at: :desc)
-      @favorites = @user.favorite_places.order(:name)
       render :show, status: :unprocessable_content
     end
   end

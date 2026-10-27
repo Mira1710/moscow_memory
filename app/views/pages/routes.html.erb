@@ -31,7 +31,6 @@
                 <div><dt>Длина</dt><dd><%= card["distance"].presence || "уточняется" %></dd></div>
               </dl>
             </figcaption>
-            <%= button_to "В избранное", saved_routes_path(route_key: card.fetch("image")), class: "route-save" %>
           </figure>
         <% end %>
       </div>

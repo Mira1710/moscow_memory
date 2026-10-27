@@ -39,16 +39,15 @@ class UserAccountsTest < ActionDispatch::IntegrationTest
     submission = user.profile_submissions.last
     assert_equal "pending", submission.status
     assert_equal user.id, submission.user_id
-    assert_difference("SavedPlace.count", 1) { post saved_places_path, params: { place_id: places(:one).id } }
-    assert_no_difference("SavedPlace.count") { post saved_places_path, params: { place_id: places(:one).id } }
-    assert_difference("SavedRoute.count", 1) { post saved_routes_path, params: { route_key: "fire-1812.jpg" } }
-    assert_no_difference("SavedRoute.count") { post saved_routes_path, params: { route_key: "../unknown" } }
+    assert_no_difference("SavedPlace.count") { post "/saved_places", params: { place_id: places(:one).id } }
+    assert_response :not_found
+    assert_no_difference("SavedRoute.count") { post "/saved_routes", params: { route_key: "fire-1812.jpg" } }
     assert_response :not_found
     get admin_profile_submissions_path
     assert_redirected_to admin_login_path
     delete user_logout_path
     register(email: "other@example.test", username: "other")
-    assert_no_difference("SavedPlace.count") { delete saved_place_path(SavedPlace.last) }
+    assert_no_difference("SavedPlace.count") { delete "/saved_places/1" }
     assert_response :not_found
   end
 
