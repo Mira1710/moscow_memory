@@ -4,7 +4,7 @@
         <%= image_tag "logo.svg", alt: "Москведение" %>
       <% else %><svg viewBox="0 0 240 130" aria-hidden="true"><path d="M20 -5 C55 10 28 55 73 30 S126 18 101 58 S74 112 118 112 S159 32 190 37 S240 86 215 101 S230 124 201 130" fill="none" stroke="#80c2e9" stroke-width="4"/><text x="17" y="100" fill="#b81216" font-family="Arial Narrow, sans-serif" font-stretch="condensed" font-size="78" font-weight="200" textLength="207" lengthAdjust="spacingAndGlyphs">МОСКВЕДЕНИЕ</text></svg><% end %>
     <% end %>
-    <nav aria-label="Основное меню" id="<%= { "map" => "mobile-map-navigation", "routes" => "routes-navigation", "articles" => "articles-navigation", "profile" => "profile-navigation" }[active_section] %>">
+    <nav aria-label="Основное меню" id="<%= { "map" => "mobile-map-navigation", "routes" => "routes-navigation", "articles" => "articles-navigation", "profile" => "profile-navigation", "about" => "about-navigation" }[active_section] %>">
       <% [
         ["Карта", root_path, "map"],
         ["Маршруты", walking_routes_path, "routes"],
@@ -13,7 +13,7 @@
         ["О нас", about_path, "about"],
         ["Профиль", profile_path, "profile"]
       ].each do |label, path, icon| %>
-        <%= link_to path, class: ["menu-link", ("active" if active_section == icon)], aria: { current: ("page" if active_section == icon) } do %>
+        <%= link_to path, class: ["menu-link", ("menu-link--map" if icon == "map"), ("active" if active_section == icon)], aria: { current: ("page" if active_section == icon) } do %>
           <span><%= label %></span>
           <% if Rails.root.join("app/assets/images/menu/#{icon}.svg").file? %>
             <%= image_tag "menu/#{icon}.svg", class: "menu-icon", alt: "", aria: { hidden: true } %>

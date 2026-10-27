@@ -3,15 +3,17 @@ import { Controller } from "@hotwired/stimulus"
 const clamp = value => Math.max(0, Math.min(1, value))
 
 export default class extends Controller {
-  static targets = ["intro", "history", "maps", "mapFrame"]
+  static targets = ["intro", "history", "maps", "mapFrame", "slides", "slideLabel"]
 
   connect() {
+    this.mobile = window.matchMedia("(max-width: 767px)")
     this.motion = window.matchMedia("(prefers-reduced-motion: reduce)")
     this.schedule = () => {
       if (!this.frame) this.frame = requestAnimationFrame(() => { this.frame = null; this.paint() })
     }
     this.element.addEventListener("scroll", this.schedule, { passive: true })
     this.motion.addEventListener("change", this.schedule)
+    this.mobile.addEventListener("change", this.schedule)
     this.observer = new ResizeObserver(this.schedule)
     this.observer.observe(this.element)
     this.paint()
@@ -23,7 +25,28 @@ export default class extends Controller {
     return clamp((this.element.scrollTop - section.offsetTop) / Math.max(1, section.offsetHeight - viewport))
   }
 
+  slideChanged() {
+    const index = Math.round(this.slidesTarget.scrollLeft / Math.max(1, this.slidesTarget.clientWidth))
+    this.slideLabelTarget.textContent = `${index + 1} / 2`
+  }
+
+  moveSlide(direction) {
+    this.slidesTarget.scrollBy({ left: this.slidesTarget.clientWidth * direction, behavior: this.motion.matches ? "instant" : "smooth" })
+  }
+
+  previousSlide() { this.moveSlide(-1) }
+  nextSlide() { this.moveSlide(1) }
+
+  slideKey(event) {
+    if (event.key === "ArrowRight") { event.preventDefault(); this.nextSlide() }
+    if (event.key === "ArrowLeft") { event.preventDefault(); this.previousSlide() }
+  }
+
   paint() {
+    if (this.mobile.matches) {
+      this.mapFrameTargets.forEach(section => { section.inert = false; section.setAttribute("aria-hidden", "false") })
+      return
+    }
     const reduced = this.motion.matches
     const intro = reduced ? 1 : this.progress(this.introTarget)
     this.introTarget.style.setProperty("--intro-progress", intro)
@@ -52,6 +75,7 @@ export default class extends Controller {
   disconnect() {
     this.element.removeEventListener("scroll", this.schedule)
     this.motion.removeEventListener("change", this.schedule)
+    this.mobile.removeEventListener("change", this.schedule)
     this.observer.disconnect()
     if (this.frame) cancelAnimationFrame(this.frame)
   }

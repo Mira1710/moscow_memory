@@ -1,4 +1,8 @@
 <% content_for :title, "О нас — Москведение" %>
+<header class="routes-mobile-header about-mobile-header">
+<%= link_to root_path, class: "routes-mobile-logo", aria: { label: "Москведение — главная" } do %><%= image_tag "mobile-logo.svg", alt: "Москведение" %><% end %>
+<span>О нас</span><button type="button" aria-label="Открыть меню" aria-controls="about-navigation" aria-expanded="false" data-routes-menu-target="button" data-action="routes-menu#toggle"><i aria-hidden="true">☰</i></button>
+</header>
 <section class="about-scene about-intro" data-about-story-target="intro" aria-labelledby="about-title">
   <div class="about-intro-stage">
     <div class="about-intro-heading"><h1 id="about-title">Вдоль и поперёк</h1></div>
@@ -10,6 +14,12 @@
       <span class="about-bridge-end">сейчас</span>
     </div>
     <div class="about-bridge-periods"><span>ВОВ и восстановление</span><span>Расширение периферии</span><span>Жилые дома</span><span>Коммерциализация</span><span>Современный урбанизм</span></div>
+    <div class="about-mobile-timeline" aria-label="От прошлого к настоящему">
+      <div class="about-mobile-year-row"><span class="about-mobile-end">тогда</span><% [1950, 1960, 1970].each do |year| %><%= render "shared/timeline_year", year: year %><% end %></div>
+      <div class="about-mobile-period-row"><span>ВОВ и восстановление</span><span>Расширение периферии</span><span>Жилые дома</span></div>
+      <div class="about-mobile-year-row"><% [1990, 2000, 2010].each do |year| %><%= render "shared/timeline_year", year: year %><% end %><span class="about-mobile-end">сейчас</span></div>
+      <div class="about-mobile-period-row"><span>Коммерциализация</span><span>Современный урбанизм</span></div>
+    </div>
     <a class="about-next" href="#scattered-history">Листайте, чтобы узнать ↓</a>
   </div>
 </section>
@@ -18,6 +28,7 @@
   <div class="about-history-stage">
     <h2 id="history-title" class="about-display">История разбросана</h2>
     <p class="about-narrow-copy">Существующие источники и сервисы сосредоточены на отдельных видах информации, не синхронизированной между категориями и временем.</p>
+    <p class="about-mobile-evidence-copy">Фотографии теряются, бумага ветшает и выцветает.<br>Карты и планы сложно найти без доступа к архивам.<br>Истории разбросаны по разным источникам и библиотекам.<br>Важные артефакты разрушаются временем.<br>Звуки остаются в памяти старожилов.</p>
     <div class="about-evidence-grid">
       <% [
         ["archive-photo.jpg", "Архивная фотография", "Фотографии теряются, бумага ветшает и выцветает"],
@@ -33,6 +44,8 @@
 </section>
 
 <div class="about-map-story" data-about-story-target="maps"><div class="about-map-stage">
+<h2 class="about-display about-mobile-map-title">Мы собираем факты воедино</h2>
+<div class="about-map-slides" tabindex="0" role="region" aria-label="Как работает карта — листайте влево" data-about-story-target="slides" data-action="scroll->about-story#slideChanged keydown->about-story#slideKey">
 <section class="about-scene about-how" data-about-story-target="mapFrame" aria-labelledby="how-title">
   <div class="about-how-grid">
     <div class="about-how-copy">
@@ -58,6 +71,8 @@
   </div>
 </section>
 
+</div>
+<div class="about-slide-controls"><button type="button" data-action="about-story#previousSlide" aria-label="Предыдущий слайд">←</button><span data-about-story-target="slideLabel" aria-live="polite">1 / 2</span><button type="button" data-action="about-story#nextSlide" aria-label="Следующий слайд">→</button></div>
 <section class="about-scene about-more" data-about-story-target="mapFrame" aria-labelledby="more-title">
   <div class="about-depth about-more-grid">
     <div class="about-more-copy">
@@ -76,8 +91,13 @@
   </div>
 </section>
 </div></div>
-<footer class="about-footer">
+<footer class="about-footer about-desktop-footer">
   <div>Цифровой архив Москвы.<br>© Москведение, <%= Date.current.year %></div>
   <%= link_to "Материалы проекта", articles_path %>
   <%= link_to "Вернуться к карте ↗", root_path %>
+</footer>
+
+<footer class="about-footer about-mobile-footer">
+<div>Цифровой архив Москвы.<br>© Москведение, <%= Date.current.year %><p><button type="button" disabled>Telegram ↗</button><br><button type="button" disabled>VK ↗</button></p></div>
+<div><button type="button" disabled>Политика конфиденциальности</button><p><%= link_to "Источники", articles_path %><br><button type="button" disabled>Обратная связь</button></p></div>
 </footer>
