@@ -2,8 +2,8 @@
 .about-map-slides { display:contents; }
 .moscow-memory.about-page .about-mobile-footer { display:none; }
 .moscow-memory .menu-link--map { overflow:hidden; }
-.moscow-memory .menu-link--map .menu-icon { position:absolute; inset:.625vw; width:calc(100% - 1.25vw); height:calc(100% - 1.25vw); object-fit:contain; object-position:right center; }
-.moscow-memory .menu-link--map > span { position:relative; z-index:1; background:var(--paper); padding-right:8px; }
+.moscow-memory .menu-link--map .menu-icon { position:absolute; inset:.125vw; width:calc(100% - .25vw); height:calc(100% - .25vw); object-fit:contain; object-position:right center; }
+.moscow-memory .menu-link--map > span { position:relative; z-index:1; background:transparent; padding-right:8px; }
 @media(max-width:767px) {
 .moscow-memory.section-page.about-page { --side:0%; }
 .moscow-memory.section-page.about-page::after { display:none; }
